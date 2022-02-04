@@ -2,8 +2,8 @@ import { useLocalStorage } from 'hooks/useLocalStorage'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { createContext, useCallback, useContext } from 'react'
-
-const Login = dynamic(() => import('./Login'))
+import Login from 'components/Login'
+import Layout from './Layout'
 
 interface GuardContextProps {
   isAuthorized?: boolean
@@ -40,12 +40,11 @@ const GuardRoute: React.FC = ({ children }) => {
   const logout = useCallback(() => {
     clearAccessToken()
     router.push('/')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clearAccessToken])
 
-  if (!process.browser) return <div></div>
+  if (!typeof window) return <div></div>
 
-  return <GuardContext.Provider value={{ isAuthorized, login, logout }}>{isAuthorized ? <>{children}</> : <Login />}</GuardContext.Provider>
+  return <GuardContext.Provider value={{ isAuthorized, login, logout }}>{isAuthorized ? <Layout>{children}</Layout> : <Login />}</GuardContext.Provider>
 }
 
 export const useGuardContext = () => useContext(GuardContext)
