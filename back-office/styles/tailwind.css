@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.t-btn-primary {
+  @apply p-2 rounded bg-white border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white;
+}
+
+.t-btn-danger {
+  @apply p-2 rounded bg-white border border-red-500 text-red-500 hover:bg-red-500 hover:text-white;
+}
+
+.ant-modal .ant-btn-primary {
+  @apply bg-blue-500 border border-blue-500 text-white hover:bg-white hover:text-blue-500;
+}
+
+.t-btn-disable {
+  @apply p-2 rounded bg-gray-300  text-gray-600;
+}
