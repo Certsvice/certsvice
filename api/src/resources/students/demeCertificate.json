@@ -1,0 +1,122 @@
+{
+    "data": {
+        "name": "Mr. SUPHACHAI PECHTUMRONG",
+        "birthdate": "1/10/2000",
+        "birthplace": "MAHA SARAKHAM, THAILAND",
+        "previousCertificates": "M.6/3/30/2018",
+        "institute": "ENGINEERING",
+        "studentId": "B6111427",
+        "identificationNumber": "1 4404 00155 61 8",
+        "nationality": "THAI",
+        "addmissionDate": "8/6/2018",
+        "graduationDate": "3/10/2022",
+        "schoolOf": "COMPUTER ENGINEERING",
+        "degree": "BACHELOR",
+        "dateOfIssue": "8/27/2021",
+        "certificateId": "1"
+    },
+    "issuer": {
+        "name": "SURANAREE UNIVERSITY OF TECHNOLOGY",
+        "certificateStore": "0xB07ed7Fc2F26C6C1Ed4ad8f5d9855724331E31c0"
+    },
+    "transcript": [
+        {
+            "name": "FIRST TRIMESTER 2018",
+            "semester": "1/2018",
+            "creditsEarned": 21,
+            "totalCreditEarned": 21,
+            "gpa": 3.70,
+            "gpax": 3.70,
+            "course": [
+                {
+                    "courseCode": "103101",
+                    "courseName": "CALCULUS I",
+                    "credit": 4,
+                    "grade": "A"
+                },
+                {
+                    "courseCode": "105101",
+                    "courseName": "PHYSICS I",
+                    "credit": 4,
+                    "grade": "A"
+                },
+                {
+                    "courseCode": "105191",
+                    "courseName": "PHYSICS LABORATORY I",
+                    "credit": 1,
+                    "grade": "A"
+                },
+                {
+                    "courseCode": "202108",
+                    "courseName": "DIGITAL LITERACY",
+                    "credit": 2,
+                    "grade": "B+"
+                },
+                {
+                    "courseCode": "202109",
+                    "courseName": "USE OF APPLICATION PROGRAMS FOR LEARNING",
+                    "credit": 1,
+                    "grade": "B+"
+                },
+                {
+                    "courseCode": "202201",
+                    "courseName": "LIFE SKILLS",
+                    "credit": 3,
+                    "grade": "B"
+                },
+                {
+                    "courseCode": "213101",
+                    "courseName": "ENGLISH FOR COMMUNICATION 1 ( T )",
+                    "credit": 3,
+                    "grade": "S"
+                },
+                {
+                    "courseCode": "213102",
+                    "courseName": "ENGLISH FOR COMMUNICATION 2 ( T )",
+                    "credit": 3,
+                    "grade": "S"
+                }
+            ]
+        },
+        {
+            "name": "SECOND TRIMESTER 2018",
+            "semester": "2/2018",
+            "creditsEarned": 21,
+            "totalCreditEarned": 21,
+            "gpa": 3.70,
+            "gpax": 3.70,
+            "course": [
+                {
+                    "courseCode": "103102",
+                    "courseName": "CALCULUS II",
+                    "credit": 4,
+                    "grade": "A"
+                },
+                {
+                    "courseCode": "105102",
+                    "courseName": "PHYSICS II",
+                    "credit": 4,
+                    "grade": "B+"
+                },
+                {
+                    "courseCode": "105192",
+                    "courseName": "PHYSICS LABORATORY II",
+                    "credit": 1,
+                    "grade": "A"
+                },
+                {
+                    "courseCode": "525101",
+                    "courseName": "ENGINEERING GRAPHICS I",
+                    "credit": 2,
+                    "grade": "A"
+                },
+                {
+                    "courseCode": "531101",
+                    "courseName": "ENGINEERING MATERIALS",
+                    "credit": 4,
+                    "grade": "A"
+                }
+            ]
+        }
+    ]
+}
