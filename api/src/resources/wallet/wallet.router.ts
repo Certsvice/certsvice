@@ -1,9 +1,9 @@
 import { Router } from 'express'
-import { getUniversity } from './wallet.controllers'
+import { getWallet } from './wallet.controllers'
 
 const router = Router()
 
-router.get('/', getUniversity)
+router.get('/', getWallet)
 // router.put('/', updateMe)
 
 export default router
