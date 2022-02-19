@@ -7,14 +7,14 @@
   ],
   "verbose": true,
   "execMap": {
-    "js": "node"
+    "ts": "ts-node"
   },
-  
   "runOnChangeOnly": false,
   "watch": [
+    "src/**/*.ts",
     "src/**/*.js",
     "src/**/*.graphql",
     "src/**/*.gql"
   ],
-  "ext": "js,json,graphql"
+  "ext": "js,ts,json,graphql"
 }

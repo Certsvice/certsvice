@@ -1,14 +1,16 @@
 import { merge } from 'lodash'
+import { ConfigType } from '../types'
 const env = process.env.NODE_ENV || 'dev'
 
-const baseConfig = {
-  env,
+const baseConfig: ConfigType = {
+  env: env,
   isDev: env === 'dev',
-  port: 8080,
+  port: '8080',
   secrets: {
     jwt: process.env.JWT_SECRET,
     jwtExp: `${process.env.JWT_EXP}h`,
   },
+  dbUrl: ''
 }
 
 let envConfig = {}
