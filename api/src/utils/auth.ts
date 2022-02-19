@@ -1,6 +1,8 @@
 import config from '../config'
 import { Wallet } from '../resources/wallet/wallet.model'
 import jwt from 'jsonwebtoken'
+import { University } from '../resources/universities/university.model'
+import express from 'express'
 
 export const newToken = (wallet) => {
   return jwt.sign({ id: wallet._id }, config.secrets.jwt, {
@@ -21,7 +23,8 @@ export const signup = async (req, res) => {
     return res.status(400).send({ message: 'Address and University required' })
   }
   const check = await Wallet.findOne({ address: req.body.address }).lean().exec()
-
+  const checkOwner = await University.findOne({ _id: req.body.owner })
+  console.log(checkOwner)
   try {
     if (!check) {
       const wallet = await Wallet.create(req.body)
@@ -35,8 +38,7 @@ export const signup = async (req, res) => {
   }
 }
 
-export const signin = async (req, res) => {
-  console.log(req.body)
+export const signin = async (req: express.Request, res: express.Response) => {
   if (!req.body.address) {
     return res.status(400).send({ message: 'Address required' })
   }
@@ -60,7 +62,7 @@ export const signin = async (req, res) => {
   }
 }
 
-export const protect = async (req, res, next) => {
+export const protect = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   const bearer = req.headers.authorization
 
   if (!bearer || !bearer.startsWith('Bearer ')) {
@@ -77,6 +79,6 @@ export const protect = async (req, res, next) => {
   if (!wallet) {
     return res.status(401).end()
   }
-  req.address = wallet
+  //req.address = wallet
   next()
 }

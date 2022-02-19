@@ -19,6 +19,7 @@ app.use(json())
 app.use(urlencoded({ extended: true }))
 app.use(morgan('dev'))
 
+// Router
 app.use('/api/university', universityRouter)
 app.get('/api/status/:address', verifyStatus)
 app.post('/api/signup', signup)

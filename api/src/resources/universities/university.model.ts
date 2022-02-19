@@ -23,9 +23,5 @@ const universitySchema = new mongoose.Schema(
 )
 universitySchema.index({ code: 1 })
 
-const University = mongoose.model('university', universitySchema)
+export const University = mongoose.model('university', universitySchema)
 
-const db = mongoose.connection
-
-export { db }
-export { University }

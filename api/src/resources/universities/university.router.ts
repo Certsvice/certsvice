@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import controllers from './university.controllers'
+import { getMany } from './university.controllers'
 
 const router = Router()
 
-router.route('/').get(controllers.getMany)
+router.get('/',getMany)
 
 export default router
