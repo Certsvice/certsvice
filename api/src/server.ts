@@ -10,6 +10,7 @@ import config from './config'
 // Router controll
 import universityRouter from './resources/universities/university.router'
 import studentRouter from './resources/students/student.router'
+import walletRouter from './resources/wallet/wallet.router'
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.use(morgan('dev'))
 
 // Router
 app.use('/api/university', universityRouter)
+app.use('/api/wallet', walletRouter)
 app.get('/api/status/:address', verifyStatus)
 app.post('/api/signup', signup)
 app.post('/api/signin', signin)

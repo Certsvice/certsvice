@@ -1,0 +1,224 @@
+{
+	"compiler": {
+		"version": "0.8.4+commit.c7e474f2"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "oldOwner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "OwnerSet",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_hash",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_id",
+						"type": "string"
+					}
+				],
+				"name": "addStudent",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_university",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "_universityName",
+						"type": "string"
+					}
+				],
+				"name": "addUniversity",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "newOwner",
+						"type": "address"
+					}
+				],
+				"name": "changeOwner",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_id",
+						"type": "string"
+					}
+				],
+				"name": "deleteStudent",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_university",
+						"type": "address"
+					}
+				],
+				"name": "deleteUniversity",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getOwner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_id",
+						"type": "string"
+					}
+				],
+				"name": "getStudent",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "issuer",
+								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "hash",
+								"type": "string"
+							}
+						],
+						"internalType": "struct Certsvice.student",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_university",
+						"type": "address"
+					}
+				],
+				"name": "getUniversity",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"changeOwner(address)": {
+					"details": "Change owner",
+					"params": {
+						"newOwner": "address of new owner"
+					}
+				},
+				"getOwner()": {
+					"details": "Return owner address ",
+					"returns": {
+						"_0": "address of owner"
+					}
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"Cerisvice.sol": "Certsvice"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"Cerisvice.sol": {
+			"keccak256": "0xa9b4c6dd9dd4aa5ace263e695a5e6ee4d62349a6e44ec6570f4211d58228aa08",
+			"license": "Unlicense",
+			"urls": [
+				"bzz-raw://14e7769b327c9e392736946475e373ecee5a77be8576ea961fc289285e46ebf3",
+				"dweb:/ipfs/QmNfT7THKczegZFe8YzMpaSxAJzkmPTdhW9ZZmxdEavuJd"
+			]
+		},
+		"Owner.sol": {
+			"keccak256": "0x003eba86cfc46b35ecd61f77d74c7db9b7c29ccb28dbaa72e3236a7c9c46088c",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://fd1183d3425604e2a695e28e7a0eca44f67e203183de1879b1e712f54b24c06e",
+				"dweb:/ipfs/QmQBVYK5UTMAJHVxtCcauSkPHf1vuY9aohFRxofZoxoVbK"
+			]
+		}
+	},
+	"version": 1
+}
