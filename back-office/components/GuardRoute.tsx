@@ -1,50 +1,43 @@
 import { useLocalStorage } from 'hooks/useLocalStorage'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { createContext, useCallback, useContext } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import Login from 'components/Login'
 import Layout from './Layout'
+import { useWeb3 } from 'hooks/useWeb3'
 
 interface GuardContextProps {
-  isAuthorized?: boolean
-  login: (token: string) => Promise<boolean>
-  logout: () => void
+  isChain?: boolean
+  isOwner?: boolean
+  isUniversity?: boolean
+  checkPermission: () => void
+  Logout: () => void
 }
 
 const GuardContext = createContext<GuardContextProps>({} as GuardContextProps)
 
 const GuardRoute: React.FC = ({ children }) => {
   const router = useRouter()
-  const [accessToken, setAccessToken, clearAccessToken] = useLocalStorage('accessToken', '')
+  const [isChain, setIsChain] = useState(false)
+  const { getOwner, getChain } = useWeb3()
 
-  if (accessToken) {
-    // const date = jwt.decode(accessToken) as jwt.JwtPayload
-    // if (date?.exp) {
-    //   if (dayjs(date.exp * 1000).diff(dayjs()) <= 0) {
-    //     clearAccessToken()
-    //   }
-    // } else {
-    //   clearAccessToken()
-    // }
+  async function checkPermission() {
+    setIsChain((await getChain()) === 3)
   }
-  const isAuthorized = !!accessToken
 
-  const login = useCallback(
-    async (token: string) => {
-      setAccessToken(token)
-      return true
-    },
-    [setAccessToken]
+  function Logout() {
+    setIsChain(false)
+  }
+
+  useEffect(() => {
+    checkPermission()
+  }, [])
+
+  return (
+    <GuardContext.Provider value={{ checkPermission, Logout, isChain }}>
+      {isChain ? <Layout>{children}</Layout> : <Login />}
+    </GuardContext.Provider>
   )
-
-  const logout = useCallback(() => {
-    clearAccessToken()
-    router.push('/')
-  }, [clearAccessToken])
-
-  if (!typeof window) return <div></div>
-
-  return <GuardContext.Provider value={{ isAuthorized, login, logout }}>{isAuthorized ? <Layout>{children}</Layout> : <Login />}</GuardContext.Provider>
 }
 
 export const useGuardContext = () => useContext(GuardContext)
