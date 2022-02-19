@@ -94,18 +94,20 @@ table {
 .cell {
   background: white;
   margin-bottom: 8px;
-  padding: 12px 4px;
-  height: 64px;
+  padding: 8px 8px;
+  height: 40px;
 }
 .cell-header {
-  height: 96px;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 .cell-double {
   height: 96px;
 }
 .cell-content {
   overflow: hidden;
+}
+.return-button {
+  color: #666666;
 }
 th:nth-child(1) {
   width: 40px;
