@@ -17,7 +17,12 @@ export function useWeb3() {
 
     async function getAccount() {
         const accounts = await web3.eth.getAccounts();
-        return accounts[0]
+        return accounts[0] ? accounts[0].toLowerCase() : ""
+    }
+
+    async function getAccountInject() {
+        const accounts = await eth.request({ method: "eth_requestAccounts" })
+        return accounts[0] ? accounts[0].toLowerCase() : ""
     }
 
     async function getChain() {
@@ -35,8 +40,9 @@ export function useWeb3() {
         eth.on("accountsChanged", onChange);
     }
 
-    async function getOwner() {
-        return await certsvice.methods.getOwner().call()
+    async function getOwner(): Promise<string> {
+        const owner = await certsvice.methods.getOwner().call()
+        return owner.toLowerCase()
     }
 
     async function getUniversity() {
@@ -44,5 +50,5 @@ export function useWeb3() {
         return await certsvice.methods.getUniversity(account).call()
     }
 
-    return { getBalance, getAccount, getChain, changeChain, onAccounstChanged, getOwner, getUniversity }
+    return { getBalance, getAccount, getChain, changeChain, onAccounstChanged, getOwner, getUniversity, getAccountInject }
 }

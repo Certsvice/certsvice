@@ -6,7 +6,7 @@ import ModalCard from './ModalCard'
 
 export default function Login() {
   const [openCancel, setOpenCancel] = useState(false)
-  const { getAccount, getChain, getOwner, changeChain } = useWeb3()
+  const { getAccountInject, getChain, getOwner, changeChain } = useWeb3()
   const { checkPermission } = useGuardContext()
 
   async function handleAuth() {
@@ -15,8 +15,10 @@ export default function Login() {
       await changeChain()
     } else {
       alert('right chain')
-      const account = await getAccount()
+      const account = await getAccountInject()
       const owner = await getOwner()
+      console.log(account, 'account')
+      console.log(owner, 'owner')
       if (account === owner) {
         checkPermission()
       } else {
