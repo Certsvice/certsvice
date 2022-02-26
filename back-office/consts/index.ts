@@ -13,6 +13,12 @@ export enum MenuState {
     ASSIGNMENT_JOB = 5,
 }
 
+export enum Role {
+    OWNER = "contract owner",
+    UNIVERSITY = "registered university",
+    UNDEFINED = "undefined"
+}
+
 export const ABI = [
     {
         "anonymous": false,

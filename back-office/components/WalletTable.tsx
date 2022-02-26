@@ -1,11 +1,7 @@
 import { useApi } from 'hooks/useApi'
-import { useLocalStorage } from 'hooks/useLocalStorage'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Column, useTable } from 'react-table'
-import { Wallet, WalletColumn } from 'types'
-import Table from './Table'
+import { WalletColumn } from 'types'
 
 export default function WalletTable() {
   const [data, setData] = useState<WalletColumn[]>([])
@@ -16,7 +12,7 @@ export default function WalletTable() {
       const res = await getWallets()
       if (res) {
         const data = res.map((res) => {
-          return { ...res, owner: res.owner.name, verify: `${res.verify}` }
+          return { ...res, owner: res.owner.name, verify: `${res.verify ? 'verified' : 'not verified'}` }
         })
         setData(data)
       }
@@ -70,11 +66,7 @@ export default function WalletTable() {
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column, i) => (
                 <th {...column.getHeaderProps({ style: { width: column.width } })}>
-                  <div
-                    className={`cell cell-header ${i === 0 ? 'rounded-bl' : ''} ${
-                      i === headerGroup.headers.length - 1 ? 'rounded-br' : ''
-                    }`}
-                  >
+                  <div className={`cell cell-header ${i === 0 ? 'rounded-bl' : ''} ${i === headerGroup.headers.length - 1 ? 'rounded-br' : ''}`}>
                     {column.render('Header')}
                   </div>
                 </th>

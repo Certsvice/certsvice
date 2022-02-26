@@ -1,29 +1,27 @@
+import { Role } from 'consts'
 import { useWeb3 } from 'hooks/useWeb3'
-import { useState } from 'react'
 import { useGuardContext } from '../components/GuardRoute'
 import LoginBtn from './LoginBtn'
-import ModalCard from './ModalCard'
 
 export default function Login() {
-  const [openCancel, setOpenCancel] = useState(false)
-  const { getAccountInject, getChain, getOwner, changeChain } = useWeb3()
   const { checkPermission } = useGuardContext()
+  const { getChain, getAccountInject, getOwner, getUniversity, changeChain } = useWeb3()
 
   async function handleAuth() {
-    if ((await getChain()) !== 3) {
-      alert('wrong chain')
-      await changeChain()
-    } else {
-      alert('right chain')
+    const chainId = (await getChain()) === 3
+
+    if (chainId) {
       const account = await getAccountInject()
-      const owner = await getOwner()
-      console.log(account, 'account')
-      console.log(owner, 'owner')
-      if (account === owner) {
-        checkPermission()
+      if (account === (await getOwner())) {
+        checkPermission(chainId, Role.OWNER)
+      } else if (account === (await getUniversity())) {
+        checkPermission(chainId, Role.UNIVERSITY)
       } else {
-        alert('not owner or university')
+        checkPermission(chainId, Role.UNDEFINED)
       }
+    } else {
+      await changeChain()
+      handleAuth()
     }
   }
 

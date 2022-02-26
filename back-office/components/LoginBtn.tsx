@@ -1,14 +1,24 @@
+import { Loading } from '@nextui-org/react'
+import { useState } from 'react'
 import styled from 'styled-components'
 
 type Props = {
-  onConnect?: () => void
+  onConnect: () => void
 }
 
 export default function LoginBtn({ onConnect }: Props) {
+  const [loading, setLoading] = useState(false)
+
+  async function handle() {
+    setLoading(true)
+    await onConnect()
+    setLoading(false)
+  }
+
   return (
     <Login>
-      <Address onClick={onConnect}>
-        <span>CONNECT WALLET</span>
+      <Address onClick={handle} className={'items-center'}>
+        {loading ? <Loading type="points" /> : <span>CONNECT WALLET</span>}
         <img src="metamask.svg" alt="Metamask"></img>
       </Address>
     </Login>
@@ -33,7 +43,6 @@ const Login = styled.div`
 `
 const Address = styled.div`
   display: flex;
-  align-items: flex-end;
   justify-content: center;
   letter-spacing: 1.5px;
   cursor: pointer;

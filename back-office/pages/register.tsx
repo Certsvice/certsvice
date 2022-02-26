@@ -1,13 +1,12 @@
 import AddUniversity from 'components/AddUniversity'
 import Title from 'components/Title'
-import WalletTable from 'components/WalletTable'
 import type { NextPage } from 'next'
 import router from 'next/router'
 
 const Register: NextPage = () => {
   return (
     <div className="container mx-auto">
-      <button className="return-button" onClick={() => router.back()}>
+      <button className="return-button" onClick={() => router.replace('/')}>
         {'< '}ย้อนกลับ
       </button>
       <Title>ลงทะเบียน</Title>

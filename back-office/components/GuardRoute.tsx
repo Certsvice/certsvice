@@ -1,41 +1,36 @@
-import { useLocalStorage } from 'hooks/useLocalStorage'
-import dynamic from 'next/dynamic'
-import { useRouter } from 'next/router'
-import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import Login from 'components/Login'
-import Layout from './Layout'
+import { Role } from 'consts'
 import { useWeb3 } from 'hooks/useWeb3'
+import { useRouter } from 'next/router'
+import { createContext, useContext, useEffect, useState } from 'react'
+import Layout from './Layout'
 
 interface GuardContextProps {
-  isChain?: boolean
-  isOwner?: boolean
-  isUniversity?: boolean
-  checkPermission: () => void
+  isChain: boolean
+  role: Role
+  checkPermission: (chain: boolean, role: Role) => void
   Logout: () => void
 }
 
 const GuardContext = createContext<GuardContextProps>({} as GuardContextProps)
 
 const GuardRoute: React.FC = ({ children }) => {
-  const router = useRouter()
   const [isChain, setIsChain] = useState(false)
-  const { getOwner, getChain } = useWeb3()
+  const [role, setRole] = useState<Role>(Role.UNDEFINED)
 
-  async function checkPermission() {
-    setIsChain((await getChain()) === 3)
+  function checkPermission(chain: boolean, role: Role) {
+    setIsChain(chain)
+    setRole(role)
   }
 
   function Logout() {
     setIsChain(false)
+    setRole(Role.UNDEFINED)
   }
 
-  useEffect(() => {
-    checkPermission()
-  }, [])
-
   return (
-    <GuardContext.Provider value={{ checkPermission, Logout, isChain }}>
-      {isChain ? <Layout>{children}</Layout> : <Login />}
+    <GuardContext.Provider value={{ checkPermission, Logout, isChain, role }}>
+      {isChain && (role === Role.OWNER || role === Role.UNIVERSITY) ? <Layout>{children}</Layout> : <Login />}
     </GuardContext.Provider>
   )
 }
