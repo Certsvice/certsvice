@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Material+Icons&display=swap');
 @import './tailwind.css';
+@import '~antd/dist/antd.css';
 
 * {
   box-sizing: border-box;
@@ -12,7 +13,8 @@ html {
 
 body {
   font-size: 14px !important;
-  font-family: 'Sarabun', sans-serif !important;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, apple color emoji, segoe ui emoji,
+    Segoe UI Symbol, noto color emoji !important;
   background-color: #f6f7fb !important;
   color: #000 !important;
 }
@@ -38,33 +40,6 @@ body {
   color: #13b605;
 }
 
-.select-input .ant-select {
-  border-radius: 4px;
-  border: 1px solid #c4c4c4;
-  padding: 3px 0px 3px 4px;
-}
-
-.select-input .ant-select-selection-item {
-  font-weight: 700 !important;
-}
-
-.select-input .ant-select-disabled {
-  background: #efefee;
-  border: none;
-}
-
-.select-input .ant-select-disabled .ant-select-selection-item {
-  font-weight: 700 !important;
-  color: #000;
-}
-
-.ant-pagination-item-link {
-  border-radius: 8px;
-}
-
-tr > td {
-  cursor: pointer;
-}
 .search-btn {
   background: #0181ef;
   border-radius: 4px;
@@ -84,49 +59,4 @@ tr > td {
   left: 10px;
   position: absolute;
   top: 10px;
-}
-table {
-  table-layout: fixed;
-  text-align: center;
-  width: 100%;
-  font-weight: 300;
-}
-.cell {
-  background: white;
-  margin-bottom: 8px;
-  padding: 8px 8px;
-  height: 40px;
-}
-.cell-header {
-  margin-bottom: 8px;
-}
-.cell-double {
-  height: 96px;
-}
-.cell-content {
-  overflow: hidden;
-}
-.return-button {
-  color: #666666;
-}
-th:nth-child(1) {
-  width: 40px;
-}
-th:nth-child(3) {
-  width: 90px;
-}
-th:nth-child(4) {
-  width: 80px;
-}
-th:nth-child(5) {
-  width: 175px;
-}
-th:nth-child(7) {
-  width: 100px;
-}
-th:nth-child(13) {
-  width: 24px;
-}
-th:nth-child(14) {
-  width: 28px;
 }

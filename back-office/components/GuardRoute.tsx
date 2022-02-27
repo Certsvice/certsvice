@@ -1,8 +1,6 @@
 import Login from 'components/Login'
 import { Role } from 'consts'
-import { useWeb3 } from 'hooks/useWeb3'
-import { useRouter } from 'next/router'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import Layout from './Layout'
 
 interface GuardContextProps {

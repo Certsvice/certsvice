@@ -12,6 +12,7 @@ export default function Login() {
 
     if (chainId) {
       const account = await getAccountInject()
+      console.log(account)
       if (account === (await getOwner())) {
         checkPermission(chainId, Role.OWNER)
       } else if (account === (await getUniversity())) {
