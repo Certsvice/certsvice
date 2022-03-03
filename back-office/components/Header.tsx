@@ -7,17 +7,13 @@ import { useGuardContext } from './GuardRoute'
 
 export function Header() {
   const router = useRouter()
-  const { Logout } = useGuardContext()
-
-
+  const { logout } = useGuardContext()
 
   return (
     <div className="container mx-auto bg-white h-12 flex items-center justify-end">
       <div className="flex justify-between text-base">
-        <div className="flex space-x-6 text-gray-400">
-
-        </div>
-        <div className="flex items-center text-base text-blue-600" onClick={Logout}>
+        <div className="flex space-x-6 text-gray-400"></div>
+        <div className="flex items-center text-base text-blue-600" onClick={logout}>
           <button>ออกจากระบบ</button>
           <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 ml-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path

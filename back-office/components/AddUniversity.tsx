@@ -15,7 +15,7 @@ export default function AddUniversity() {
     try {
       const res = await getWallets()
       if (res) {
-        const data = res.map((res) => {
+        const data = res.map((res: any) => {
           return { ...res, owner: res.owner.name, verify: `${res.verify}` }
         })
         setData(data)
@@ -31,9 +31,7 @@ export default function AddUniversity() {
   return (
     <div className="pb-2">
       <div className="flex flex-col p-4 pb-6 bg-white rounded-t">
-        <div className="relative w-7/12">
-          
-        </div>
+        <div className="relative w-7/12"></div>
       </div>
     </div>
   )

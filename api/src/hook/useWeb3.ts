@@ -1,11 +1,11 @@
-import { ABI, Role } from 'consts'
+import { ABI, Role } from '../consts'
 import { AbiItem } from 'web3-utils'
 import Web3 from 'web3'
 
 export function useWeb3() {
-  const web3 = new Web3(Web3.givenProvider || 'http://localhost:8545')
+  const web3 = new Web3('https://ropsten.infura.io/v3/e448162f6a7647a7bfbbf867d0e90b10')
   const eth = web3.givenProvider
-  const certsvice = new web3.eth.Contract(ABI as AbiItem[], process.env.NEXT_PUBLIC_CONTRACT)
+  const certsvice = new web3.eth.Contract(ABI as AbiItem[], '0x976e9a7EDB1968BAd7bE4D27844B186fA946B046')
 
   async function getBalance(address: string): Promise<string> {
     const balance = await web3.eth.getBalance(address)

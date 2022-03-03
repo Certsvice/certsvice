@@ -1,8 +1,10 @@
 import config from '../config'
+import { Role } from '../consts'
 import { Wallet } from '../resources/wallet/wallet.model'
 import jwt from 'jsonwebtoken'
 import { University } from '../resources/universities/university.model'
 import express from 'express'
+import { useWeb3 } from '../hook/useWeb3'
 
 export const newToken = (wallet) => {
   return jwt.sign({ id: wallet._id }, config.secrets.jwt, {
@@ -64,21 +66,19 @@ export const signin = async (req: express.Request, res: express.Response) => {
 
 export const protect = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   const bearer = req.headers.authorization
-
+  const { account, role } = req.body
+  const { getOwner } = useWeb3()
   if (!bearer || !bearer.startsWith('Bearer ')) {
     return res.status(401).end()
   }
+  
   const token = bearer.split('Bearer ')[1].trim()
-  let payload
-  try {
-    payload = await verifyToken(token)
-  } catch (e) {
-    return res.status(401).end()
-  }
-  const wallet = await Wallet.findById(payload.id).select('-owner').lean().exec()
-  if (!wallet) {
-    return res.status(401).end()
-  }
+  const payload = await getOwner()
+  console.log(payload)
+  if (true) {
+    return res.status(200).end()
+  } 
+  res.status(401).end()
   //req.address = wallet
-  next()
+  //next()
 }

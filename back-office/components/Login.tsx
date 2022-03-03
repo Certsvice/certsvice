@@ -1,11 +1,14 @@
 import { Role } from 'consts'
 import { useWeb3 } from 'hooks/useWeb3'
+import { dayjs } from 'helpers/datetime'
+
 import { useGuardContext } from '../components/GuardRoute'
 import LoginBtn from './LoginBtn'
+import router from 'next/router'
 
 export default function Login() {
-  const { checkPermission } = useGuardContext()
-  const { getChain, getAccountInject, getOwner, getUniversity, changeChain } = useWeb3()
+  const { login } = useGuardContext()
+  const { getChain, getAccountInject, getOwner, getUniversity, changeChain, getToken } = useWeb3()
 
   async function handleAuth() {
     const chainId = (await getChain()) === 3
@@ -13,15 +16,19 @@ export default function Login() {
     if (chainId) {
       const account = await getAccountInject()
       if (account === (await getOwner())) {
-        checkPermission(chainId, Role.OWNER)
-      } else if (account === (await getUniversity())) {
-        checkPermission(chainId, Role.UNIVERSITY)
-      } else {
-        checkPermission(chainId, Role.UNDEFINED)
+        login(await getToken(account, Role.OWNER))
+        router.push('/')
+      } else if (await getUniversity()) {
+        login(await getToken(account, Role.UNIVERSITY))
+        router.push('/register')
       }
     } else {
-      await changeChain()
-      handleAuth()
+      try {
+        await changeChain()
+        await handleAuth()
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 

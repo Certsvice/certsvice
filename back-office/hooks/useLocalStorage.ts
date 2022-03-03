@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 type Value = string | number | boolean | Object
 
 export function useLocalStorage<T = Value>(key: string, initialValue?: T) {

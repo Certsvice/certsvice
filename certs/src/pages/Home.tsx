@@ -1,20 +1,86 @@
+import { useState } from 'react'
 import styled from 'styled-components'
+import hash from 'object-hash'
+import { useWeb3 } from '../hooks/useWeb3'
 
-export default function Home() {
+type Props = {
+  onSet: (data: []) => void
+}
+
+export default function Home({ onSet }: Props) {
+  const [dropMsg, setDropMsg] = useState('Drag and drop your certsvice file')
+  const [data, setData] = useState(String)
+  const [hashData, setHashData] = useState(String)
+  const { getStudent } = useWeb3()
+
+  const getInput = async (file: any) => {
+    console.log(file[0])
+    const reader = new FileReader()
+    if (file[0]) {
+      reader.readAsText(file[0])
+    }
+    reader.addEventListener(
+      'load',
+      async () => {
+        // this will then display a text file
+        if (typeof reader.result === 'string') {
+          const obj = JSON.parse(reader.result)
+          setData(obj)
+          setHashData(hash(obj.data))
+          console.log(await getStudent('1'))
+          onSet(await getStudent('1'))
+          console.log('Data from file upload = ', hash(obj.data))
+        } else {
+          setData('')
+        }
+      },
+      false
+    )
+  }
   return (
-    <>
+    <div className='w-full'>
       <Description>
         <h1>An easy way to check and verify your certificates</h1>
         <p>
-          Whether you're a student or an employer, OpenCerts lets you verify the certificates you have of anyone from any institution. All
-          in one place.
+          Whether you're a student or an employer, OpenCerts lets you verify the certificates you have of anyone from
+          any institution. All in one place.
         </p>
         <CertBox>
           <CertLogo src="https://img.icons8.com/ios-filled/100/44476a/certificate.png" alt="DemoCert"></CertLogo>
         </CertBox>
       </Description>
-      <UploadBox>
-        <input></input>
+      <UploadBox
+        id="parent"
+        onDragOver={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          document.getElementById('child')!.style.pointerEvents = 'none'
+          document.getElementById('parent')!.style.boxShadow =
+            'inset 5px 5px 10px #c4c4ca, inset -5px -5px 10px #ffffff'
+          setDropMsg('Release to Upload')
+        }}
+        onDragLeave={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          document.getElementById('child')!.style.pointerEvents = 'auto'
+          document.getElementById('parent')!.style.boxShadow = '5px 5px 10px #c4c4ca, -5px -5px 10px #ffffff'
+          setDropMsg('Drag and drop your certsvice file')
+        }}
+        onDrop={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          document.getElementById('child')!.style.pointerEvents = 'auto'
+          document.getElementById('parent')!.style.boxShadow = '5px 5px 10px #c4c4ca, -5px -5px 10px #ffffff'
+          getInput(e.dataTransfer.files)
+          setDropMsg('Drag and drop your certsvice file')
+        }}
+      >
+        <input
+          id="getUpload"
+          type="file"
+          onChange={(e) => getInput(e.target.files)}
+          onClick={(e) => (e.currentTarget.value = '')}
+        ></input>
         <Upload id="child">
           <img src="https://img.icons8.com/ios/100/44476a/drag-and-drop.png" alt="dragdrop" />
           <DragDrop>
@@ -28,7 +94,7 @@ export default function Home() {
           <UploadBtn htmlFor="getUpload">Choose File</UploadBtn>
         </Upload>
       </UploadBox>
-    </>
+    </div>
   )
 }
 

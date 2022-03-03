@@ -10,14 +10,12 @@ export default function LoginBtn({ onConnect }: Props) {
   const [loading, setLoading] = useState(false)
 
   async function handle() {
-    setLoading(true)
-    await onConnect()
-    setLoading(false)
+    onConnect()
   }
 
   return (
     <Login>
-      <Address onClick={handle} className={'items-center'}>
+      <Address onClick={onConnect} className={'items-center'}>
         {loading ? <Loading type="points" /> : <span>CONNECT WALLET</span>}
         <img src="metamask.svg" alt="Metamask"></img>
       </Address>

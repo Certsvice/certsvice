@@ -11,7 +11,7 @@ export default function WalletTable() {
     try {
       const res = await getWallets()
       if (res) {
-        const data = res.map((res) => {
+        const data = res.map((res:any) => {
           return { ...res, owner: res.owner.name, verify: `${res.verify ? 'verified' : 'not verified'}` }
         })
         setData(data)

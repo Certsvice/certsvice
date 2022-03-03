@@ -21,6 +21,7 @@ app.use(urlencoded({ extended: true }))
 app.use(morgan('dev'))
 
 // Router
+app.post('/protect', protect)
 app.use('/api/university', universityRouter)
 app.use('/api/wallet', walletRouter)
 app.get('/api/status/:address', verifyStatus)
