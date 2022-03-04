@@ -1,5 +1,5 @@
-import { Card, Grid, Link, Text } from '@nextui-org/react'
-import { PageHeader, Tabs, Button, Statistic, Descriptions, Result } from 'antd'
+import { Card, Col, Grid, Link, Button, Row, Text } from '@nextui-org/react'
+import { PageHeader, Tabs, Statistic, Descriptions, Result } from 'antd'
 import Content from 'src/components/Content'
 import { ContentProps } from 'src/types'
 
@@ -11,13 +11,13 @@ export default function Certificate() {
         onBack={() => window.history.back()}
         title="Title"
         subTitle="This is a subtitle"
-        extra={[
-          <Button key="3">Operation</Button>,
-          <Button key="2">Operation</Button>,
-          <Button key="1" type="primary">
-            Primary
-          </Button>,
-        ]}
+        // extra={[
+        //   <Button key="3">Operation</Button>,
+        //   <Button key="2">Operation</Button>,
+        //   <Button key="1" type="primary">
+        //     Primary
+        //   </Button>,
+        // ]}
         footer={
           <Tabs defaultActiveKey="1">
             <TabPane tab="Details" key="1" />
@@ -25,6 +25,52 @@ export default function Certificate() {
           </Tabs>
         }
       >
+        <Card cover css={{ w: '100%' }}>
+          <Card.Header css={{ position: 'absolute', zIndex: 1, top: 5 }}>
+            <Col>
+              <Text size={12} weight="bold" transform="uppercase" color="#ffffffAA">
+                New
+              </Text>
+              <Text h3 color="black">
+                Acme camera
+              </Text>
+            </Col>
+          </Card.Header>
+          <Card.Body>
+            <Card.Image src="/pre-booking-panasonic-lumix-gh6-mo.jpg" height={400} width="100%" alt="Card example background" />
+          </Card.Body>
+          <Card.Footer
+            blur
+            css={{
+              position: 'absolute',
+              bgBlur: '#ffffff',
+              borderTop: '$borderWeights$light solid rgba(255, 255, 255, 0.2)',
+              bottom: 0,
+              zIndex: 1,
+            }}
+          >
+            <Row>
+              <Col>
+                <Text color="#000" size={12}>
+                  Available soon.
+                </Text>
+                <Text color="#000" size={12}>
+                  Get notified.
+                </Text>
+              </Col>
+              <Col>
+                <Row justify="flex-end">
+                  <Button flat auto rounded color="secondary">
+                    <Text css={{ color: 'inherit' }} size={12} weight="bold" transform="uppercase">
+                      Notify Me
+                    </Text>
+                  </Button>
+                </Row>
+              </Col>
+            </Row>
+          </Card.Footer>
+        </Card>
+
         <ExtraContent extra={extraContent}>{renderContent()}</ExtraContent>
       </PageHeader>
       <Content className=" bg-white">
@@ -33,12 +79,12 @@ export default function Certificate() {
             status="success"
             title="Certificate issued by"
             subTitle="Order number: 2017182818828182881 Cloud server configuration takes 1-5 minutes, please wait."
-            extra={[
-              <Button type="primary" key="console">
-                Go Console
-              </Button>,
-              <Button key="buy">Buy Again</Button>,
-            ]}
+            // extra={[
+            //   <Button type="primary" key="console">
+            //     Go Console
+            //   </Button>,
+            //   <Button key="buy">Buy Again</Button>,
+            // ]}
           />
         </div>
       </Content>

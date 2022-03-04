@@ -1,0 +1,63 @@
+@import '~antd/dist/antd.css';
+
+
+.site-layout-content {
+  min-height: 280px;
+  padding: 24px;
+  background: #fff;
+}
+#components-layout-demo-top .logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+.ant-row-rtl #components-layout-demo-top .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
+
+/* For HeaderComponent */
+#components-page-header-demo-content .image {
+  display: flex;
+  align-items: center;
+  margin: 0 0 0 60px;
+}
+
+#components-page-header-demo-content .ant-page-header-rtl .image {
+  margin: 0 60px 0 0;
+}
+
+#components-page-header-demo-content .example-link {
+  margin-right: 16px;
+  line-height: 24px;
+}
+[data-theme='compact'] #components-page-header-demo-content .example-link {
+  line-height: 20px;
+}
+#components-page-header-demo-content .example-link-icon {
+  margin-right: 8px;
+}
+
+[data-theme='compact'] #components-page-header-demo-content .example-link-icon {
+  width: 20px;
+  height: 20px;
+}
+
+#components-page-header-demo-content .ant-page-header-rtl .example-link {
+  float: right;
+  margin-right: 0;
+  margin-left: 16px;
+}
+#components-page-header-demo-content .ant-page-header-rtl .example-link-icon {
+  margin-right: 0;
+  margin-left: 8px;
+}
+
+@media (max-width: 768px) {
+  #components-page-header-demo-content .image {
+    flex: 100%;
+    margin: 24px 0 0;
+  }
+}

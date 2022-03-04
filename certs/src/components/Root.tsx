@@ -1,5 +1,8 @@
-import styled from 'styled-components'
+import { NextUIProvider } from '@nextui-org/react'
+import Content from './Content'
+import Footer from './Footer'
 import Header from './Header'
+import Layout from './Layout'
 
 type Props = {
   children: React.ReactNode
@@ -7,22 +10,12 @@ type Props = {
 
 export default function Root({ children }: Props) {
   return (
-    <>
-      <Header />
-      <Container>
-        {children}
-      </Container>
-    </>
+    <NextUIProvider>
+      <Layout>
+        <Header />
+        <Content>{children}</Content>
+        <Footer />
+      </Layout>
+    </NextUIProvider>
   )
 }
-
-
-const Container = styled.section`
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  align-items: center;
-  width: 100vw;
-`
