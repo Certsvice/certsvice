@@ -38,17 +38,20 @@ export default function Home({ onSet }: Props) {
     )
   }
   return (
-    <div className='w-full'>
+    <Content>
       <Description>
-        <h1>An easy way to check and verify your certificates</h1>
+        <h1 className="thaiFont">คุณสามารถตรวจสอบ Certificate ของคุณได้ง่ายๆ ที่นี่</h1>
         <p>
-          Whether you're a student or an employer, OpenCerts lets you verify the certificates you have of anyone from
-          any institution. All in one place.
+          เพียงแค่นำไฟล์ของวางลงไปในช่อง Upload ด้านข้างนี้, Certsvice ก็จะทำการตรวจสอบ Certificate
+          ของคุณว่าถูกต้องหรือไม่
         </p>
+        <p style={{ fontWeight: 'bold' }}>ผ่านระบบ Blockchain ที่ปลอดภัยและมีความถูกต้อง</p>
+        <p style={{ fontWeight: 'bold' }}>"ง่ายครบจบในที่เดียว".</p>
         <CertBox>
           <CertLogo src="https://img.icons8.com/ios-filled/100/44476a/certificate.png" alt="DemoCert"></CertLogo>
         </CertBox>
       </Description>
+      <div className="m-8"></div>
       <UploadBox
         id="parent"
         onDragOver={(e) => {
@@ -94,7 +97,7 @@ export default function Home({ onSet }: Props) {
           <UploadBtn htmlFor="getUpload">Choose File</UploadBtn>
         </Upload>
       </UploadBox>
-    </div>
+    </Content>
   )
 }
 
@@ -200,9 +203,34 @@ const CertBox = styled.div`
   justify-content: center;
 `
 const Description = styled.div`
-  max-width: 350px;
+  max-width: 400px;
   text-align: center;
   h1 {
     margin-bottom: 1rem;
+    font-family: 'Noto Sans Thai', sans-serif;
+  }
+  p {
+    font-family: 'Noto Sans Thai', sans-serif;
+  }
+`
+const Content = styled.section`
+  margin: 3rem 2rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  @media (min-width: 1280px) {
+    max-width: 1280px;
+    flex-direction: row;
+  }
+  @media (min-width: 1024px) and (max-width: 1280px) {
+    max-width: 1024px;
+  }
+  @media (min-width: 768px) and (max-width: 1024px) {
+    max-width: 768px;
+  }
+  @media (max-width: 640px) {
+    max-width: 640px;
   }
 `
