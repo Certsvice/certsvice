@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap');
 
+.thaiFont {
+  font-family: 'Noto Sans Thai', sans-serif;
+}
+
+.thaiFont h1 {
+  font-weight: 600 !important;
+}
 /* html {
   scroll-behavior: smooth;
 }

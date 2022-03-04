@@ -1,17 +1,9 @@
-import { Layout, Menu } from 'antd'
-
-const { Header } = Layout
+import Logo from './Logo'
 
 export default function PageHeader() {
   return (
-    <Header>
-      <div className="logo" />
-      <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-        {new Array(5).fill(null).map((_, index) => {
-          const key = index + 1
-          return <Menu.Item key={key}>{`nav ${key}`}</Menu.Item>
-        })}
-      </Menu>
-    </Header>
+    <div className=" h-20 flex items-center px-4" style={{ background: '#44476a' }}>
+      <Logo image="/Logo.svg"></Logo>
+    </div>
   )
 }
