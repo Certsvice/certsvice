@@ -20,12 +20,13 @@ export const verifyToken = (token) =>
     })
   })
 
-export const signup = async (req, res) => {
-  if (!req.body.address || !req.body.owner) {
+export const signup = async (req: express.Request, res: express.Response) => {
+  const { address, owner } = req.body
+  if (!address || !owner) {
     return res.status(400).send({ message: 'Address and University required' })
   }
-  const check = await Wallet.findOne({ address: req.body.address }).lean().exec()
-  const checkOwner = await University.findOne({ _id: req.body.owner })
+  const check = await Wallet.findOne({ address }).lean().exec()
+  const checkOwner = await University.findOne({ _id: owner })
   console.log(checkOwner)
   try {
     if (!check) {
@@ -71,13 +72,12 @@ export const protect = async (req: express.Request, res: express.Response, next:
   if (!bearer || !bearer.startsWith('Bearer ')) {
     return res.status(401).end()
   }
-  
+
   const token = bearer.split('Bearer ')[1].trim()
-  const payload = await getOwner()
-  console.log(payload)
-  if (true) {
+
+  if (token) {
     return res.status(200).end()
-  } 
+  }
   res.status(401).end()
   //req.address = wallet
   //next()

@@ -7,10 +7,9 @@ export const getMany = async (req: express.Request, res: express.Response) => {
     if (!docs) {
       return res.status(400).end()
     }
-    res.status(200).json({ data: docs })
+    res.status(200).json(docs)
   } catch (e) {
     console.error(e)
     return res.status(400).end()
   }
 }
-

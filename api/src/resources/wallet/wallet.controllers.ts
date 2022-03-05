@@ -1,9 +1,18 @@
-import { University } from './../universities/university.model';
+import { University } from './../universities/university.model'
 import express from 'express'
 import { Wallet } from './wallet.model'
 
-export const getWallet = async (req: express.Request, res: express.Response) => {
+export const getWallets = async (req: express.Request, res: express.Response) => {
   const data = await Wallet.find().select('-createdAt -updatedAt').populate('owner')
+  if (!data) {
+    return res.status(404).end()
+  }
+  res.status(200).json(data)
+}
+
+export const getWallet = async (req: express.Request, res: express.Response) => {
+  const _id = req.params.id
+  const data = await Wallet.findOne({ _id }).populate('owner')
   if (!data) {
     return res.status(404).end()
   }

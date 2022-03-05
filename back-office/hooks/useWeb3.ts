@@ -1,6 +1,7 @@
 import { ABI, Role } from 'consts'
 import { AbiItem } from 'web3-utils'
 import Web3 from 'web3'
+import { Regis } from 'types'
 
 export function useWeb3() {
   const web3 = new Web3(Web3.givenProvider || 'http://localhost:8545')
@@ -46,6 +47,11 @@ export function useWeb3() {
     return owner.toLowerCase()
   }
 
+  async function addUniversity(regis: Regis) {
+    const account = await getAccount()
+    return await certsvice.methods.addUniversity(regis.address, regis.owner).send({ from: account })
+  }
+
   async function getUniversity(): Promise<string> {
     const account = await getAccount()
     return await certsvice.methods.getUniversity(account).call()
@@ -84,5 +90,6 @@ export function useWeb3() {
     getAccountInject,
     getToken,
     recoverToken,
+    addUniversity,
   }
 }

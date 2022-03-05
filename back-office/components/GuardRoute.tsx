@@ -18,15 +18,15 @@ const GuardRoute: React.FC = ({ children }) => {
   const router = useRouter()
   const [accessToken, setAccessToken, clearAccessToken] = useLocalStorage('accessToken', '')
   const { recoverToken, getAccount } = useWeb3()
-  // if (accessToken) {
-  //   //checkPermission(accessToken)
-  // }
+  if (accessToken) {
+    //checkPermission(accessToken)
+  }
   // async function checkPermission(accessToken: string) {
   //   const account = await getAccount()
   //   if ((await recoverToken(account, Role.OWNER, accessToken)) === account) {
-  //     router.push('/')
+  //     router.replace('/')
   //   } else if ((await recoverToken(account, Role.UNIVERSITY, accessToken)) === account) {
-  //     router.push('register')
+  //     router.replace('register')
   //   } else {
   //     clearAccessToken()
   //   }

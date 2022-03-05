@@ -21,14 +21,10 @@ app.use(urlencoded({ extended: true }))
 app.use(morgan('dev'))
 
 // Router
-app.post('/protect', protect)
 app.use('/api/university', universityRouter)
-app.use('/api/wallet', walletRouter)
-app.get('/api/status/:address', verifyStatus)
+app.post('/api', protect)
 app.post('/api/signup', signup)
-app.post('/api/signin', signin)
-
-app.use('/api', protect)
+app.use('/api/wallet', walletRouter)
 app.use('/api/student', studentRouter)
 
 export const start = async () => {

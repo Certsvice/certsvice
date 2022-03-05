@@ -7,20 +7,21 @@ import LoginBtn from './LoginBtn'
 import router from 'next/router'
 
 export default function Login() {
-  const { login } = useGuardContext()
+  const { login, isAuthorized } = useGuardContext()
   const { getChain, getAccountInject, getOwner, getUniversity, changeChain, getToken } = useWeb3()
 
   async function handleAuth() {
     const chainId = (await getChain()) === 3
-
     if (chainId) {
-      const account = await getAccountInject()
-      if (account === (await getOwner())) {
-        login(await getToken(account, Role.OWNER))
-        router.push('/')
-      } else if (await getUniversity()) {
-        login(await getToken(account, Role.UNIVERSITY))
-        router.push('/register')
+      if (!isAuthorized) {
+        const account = await getAccountInject()
+        if (account === (await getOwner())) {
+          login(await getToken(account, Role.OWNER))
+          router.push('/')
+        } else if (await getUniversity()) {
+          login(await getToken(account, Role.UNIVERSITY))
+          router.push('/register')
+        }
       }
     } else {
       try {

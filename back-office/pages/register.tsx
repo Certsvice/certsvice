@@ -1,21 +1,25 @@
+import { Button, PageHeader } from 'antd'
 import AddUniversity from 'components/AddUniversity'
-import Title from 'components/Title'
 import type { NextPage } from 'next'
 import router from 'next/router'
 
 const Register: NextPage = () => {
   return (
-    <div className="container mx-auto">
-      <button className="return-button" onClick={() => router.replace('/')}>
-        {'< '}ย้อนกลับ
-      </button>
-      <Title>ลงทะเบียน</Title>
-      <AddUniversity />
-      <div className="w-full flex justify-center">
-        <button className="px-6 mx-4 text-white bg-blue-500 border rounded-lg h-8" onClick={() => {}}>
-          ลงทะเบียน
-        </button>
+    <div className="container mx-auto flex flex-col items-center ">
+      <div className="flex flex-row items-center justify-center w-full">
+        <PageHeader ghost={false} onBack={() => router.replace('/')} title="ลงทะเบียนมหาวิทยาลัย"></PageHeader>
+        <div className="flex flex-row ml-auto">
+          {/* <Button className=" pr-4" key="2">
+            Operation
+          </Button>
+          <div className="mx-3"></div>
+          <Button key="1" type="primary">
+            Primary
+          </Button> */}
+        </div>
       </div>
+
+      <AddUniversity />
     </div>
   )
 }

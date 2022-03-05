@@ -16,7 +16,7 @@ const walletSchema = new mongoose.Schema(
     },
     verify: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   {
