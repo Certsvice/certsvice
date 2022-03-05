@@ -6,10 +6,10 @@ import Root from './components/Root'
 import { CertsRoute } from './consts'
 import Home from './pages/Home'
 import Result from './pages/Result'
+import { Data } from './types'
 
 function App() {
-  const [data, setData] = useState([])
-
+  const [data, setData] = useState<Data>()
   useEffect(() => {
     console.log(data, 'from app tsx')
   }, [data])
@@ -18,7 +18,7 @@ function App() {
       <Root>
         <Routes>
           <Route path={CertsRoute.Index} element={<Home onSet={setData} />} />
-          <Route path={CertsRoute.Result} element={<Result />} />
+          <Route path={CertsRoute.Result} element={<Result data={data} />} />
         </Routes>
       </Root>
     </BrowserRouter>

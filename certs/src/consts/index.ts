@@ -1,6 +1,11 @@
 export enum CertsRoute {
   Index = '/',
-  Result = '/result'
+  Result = '/result',
+}
+
+export enum UploadMsg {
+  DragOver = 'Release to Upload',
+  DragLeave = 'Drag and drop your certsvice file',
 }
 
 export enum NavbarState {
