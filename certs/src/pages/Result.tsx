@@ -1,20 +1,31 @@
-import { Button } from '@nextui-org/react'
-import { useState } from 'react'
-import { Data } from 'src/types'
+import { Button, Card, Col, Row, Spacer, Text } from '@nextui-org/react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import CertificatePage from 'src/components/Certificate'
+import Transcript from 'src/components/Transcript'
+import { CertsRoute } from 'src/consts'
+import { Certificate } from 'src/types'
 import styled from 'styled-components'
 
 type Props = {
-  data: Data | undefined
+  certificate: Certificate
 }
 
-export default function Result({ data }: Props) {
+export default function Result({ certificate }: Props) {
+  const navigate = useNavigate()
   const [toggle, setToggle] = useState(true)
-  console.log(data)
+  useEffect(() => {
+    console.log(certificate)
+    if (!certificate.issuer.certificateId) {
+      //navigate(CertsRoute.Index)
+    }
+  }, [certificate])
+
   return (
     <Content>
-      <div className="flex w-full">
+      <div className="flex w-full flex-row items-center align-middle">
         <div
-          className=" w-80 h-auto flex items-center align-middle p-3 rounded-lg mr-auto"
+          className=" w-auto h-auto flex items-center align-middle p-3 rounded-lg mr-auto"
           style={{
             backgroundColor: '#e6f1ee',
             boxShadow: ` 5px 5px 10px #c4c4ca, -5px -5px 10px #ffffff `,
@@ -25,10 +36,21 @@ export default function Result({ data }: Props) {
           </span>
           <div className="flex flex-col" style={{ color: '#28a745' }}>
             <h5 className="my-0">Certificate issued by</h5>
-            <h5 className="my-0">{}</h5>
+            <h5 className="my-0">{certificate.issuer.name}</h5>
           </div>
         </div>
-        <div className="ml-auto h-4 w-4"></div>
+        <div className="ml-auto flex flex-row items-center justify-center">
+          <Button auto ghost className="!border-0 !mr-3 !p-2">
+            <span className="material-icons-round rounded-sm" style={{ color: '#e6e7ee', backgroundColor: '#44476a' }}>
+              print
+            </span>
+          </Button>
+          <Button auto ghost className="!border-0 !p-2">
+            <span className="material-icons-round rounded-sm" style={{ color: '#e6e7ee', backgroundColor: '#44476a' }}>
+              get_app
+            </span>
+          </Button>
+        </div>
       </div>
 
       <div className="flex w-full ">
@@ -43,14 +65,11 @@ export default function Result({ data }: Props) {
         <div className="ml-auto h-4 w-4"></div>
       </div>
 
-      <div
-        className="flex w-full h-auto rounded-b-3xl rounded-tr-3xl"
-        style={{
-          minHeight: '500px',
-          backgroundColor: '#e6e7ee',
-          boxShadow: ` 5px 5px 10px #c4c4ca, -5px -5px 10px #ffffff `,
-        }}
-      ></div>
+      {toggle ? (
+        <CertificatePage certificate={certificate}></CertificatePage>
+      ) : (
+        <Transcript certificate={certificate}></Transcript>
+      )}
     </Content>
   )
 }

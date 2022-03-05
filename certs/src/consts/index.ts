@@ -1,3 +1,4 @@
+import { Certificate, Data, Issuer } from 'src/types'
 export enum CertsRoute {
   Index = '/',
   Result = '/result',
@@ -27,6 +28,31 @@ export enum Role {
   OWNER = 'contract owner',
   UNIVERSITY = 'registered university',
   UNDEFINED = 'undefined',
+}
+
+export const initialData: Data = {
+  name: '',
+  university: '',
+  studentId: '',
+  identificationNumber: '',
+  addmissionDate: '',
+  graduationDate: '',
+  program: '',
+  faculty: '',
+  degree: '',
+  degreeName: '',
+  issuedOn: '',
+}
+
+export const initialIssuer: Issuer = {
+  name: '',
+  certificateStore: '',
+  certificateId: '',
+}
+
+export const initialCertificate: Certificate = {
+  data: initialData,
+  issuer: initialIssuer,
 }
 
 export const ABI = [
