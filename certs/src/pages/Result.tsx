@@ -1,11 +1,12 @@
 import { Button, Card, Col, Row, Spacer, Text } from '@nextui-org/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CertificatePage from 'src/components/Certificate'
 import Transcript from 'src/components/Transcript'
 import { CertsRoute } from 'src/consts'
 import { Certificate } from 'src/types'
 import styled from 'styled-components'
+import { useReactToPrint } from 'react-to-print'
 
 type Props = {
   certificate: Certificate
@@ -13,7 +14,13 @@ type Props = {
 
 export default function Result({ certificate }: Props) {
   const navigate = useNavigate()
+  const componentRef = useRef<HTMLDivElement>(null)
   const [toggle, setToggle] = useState(true)
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  })
+
   useEffect(() => {
     console.log(certificate)
     if (!certificate.issuer.certificateId) {
@@ -40,12 +47,12 @@ export default function Result({ certificate }: Props) {
           </div>
         </div>
         <div className="ml-auto flex flex-row items-center justify-center">
-          <Button auto ghost className="!border-0 !mr-3 !p-2">
+          <Button auto ghost className="!border-0 !mr-3 !p-2" onClick={handlePrint}>
             <span className="material-icons-round rounded-sm" style={{ color: '#e6e7ee', backgroundColor: '#44476a' }}>
               print
             </span>
           </Button>
-          <Button auto ghost className="!border-0 !p-2">
+          <Button auto ghost className="!border-0 !p-2" onClick={handlePrint}>
             <span className="material-icons-round rounded-sm" style={{ color: '#e6e7ee', backgroundColor: '#44476a' }}>
               get_app
             </span>
@@ -65,11 +72,24 @@ export default function Result({ certificate }: Props) {
         <div className="ml-auto h-4 w-4"></div>
       </div>
 
-      {toggle ? (
-        <CertificatePage certificate={certificate}></CertificatePage>
-      ) : (
-        <Transcript certificate={certificate}></Transcript>
-      )}
+      <div
+        className="flex flex-col w-full h-auto rounded-b-3xl rounded-tr-3xl p-6"
+        style={{
+          minHeight: '500px',
+          backgroundColor: '#e6e7ee',
+          boxShadow: ` 5px 5px 10px #c4c4ca, -5px -5px 10px #ffffff `,
+        }}
+      >
+        {toggle ? (
+          <div ref={componentRef} className="w-auto h-auto">
+            <CertificatePage certificate={certificate}></CertificatePage>
+          </div>
+        ) : (
+          <div ref={componentRef} className="w-auto h-auto">
+            <Transcript certificate={certificate}></Transcript>
+          </div>
+        )}
+      </div>
     </Content>
   )
 }

@@ -35,7 +35,7 @@ export default function Course({ courses }: Props) {
         </Row>
         {courses.map((course) => {
           return (
-            <div>
+            <div key={course.courseCode}>
               <Row gap={3}>
                 <Col>
                   <Text size="0.8rem" weight="normal">

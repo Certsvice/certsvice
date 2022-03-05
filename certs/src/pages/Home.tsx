@@ -24,7 +24,7 @@ export default function Home({ onSet }: Props) {
       reader.readAsText(file[0])
       reader.addEventListener('load', async () => {
         if (typeof reader.result === 'string') {
-          const obj:Certificate = JSON.parse(reader.result)
+          const obj: Certificate = JSON.parse(reader.result)
           const certificateId: string = obj.issuer.certificateId ?? ''
           const certificateDataHash: string = hash(obj.data) ?? ''
           const certificateHash = await getStudent(certificateId)
@@ -65,7 +65,15 @@ export default function Home({ onSet }: Props) {
         <p style={{ fontWeight: 'bold' }}>ผ่านระบบ Blockchain ที่ปลอดภัยและมีความถูกต้อง</p>
         <p style={{ fontWeight: 'bold' }}>"ง่ายครบจบในที่เดียว".</p>
         <CertBox>
-          <CertLogo src="https://img.icons8.com/ios-filled/100/44476a/certificate.png" alt="DemoCert"></CertLogo>
+          <a
+            href="/demoCertificate.json"
+            download="demoCertificate"
+            rel="noindex nofollow"
+            className="cursor-grab"
+            draggable="true"
+          >
+            <CertLogo src="https://img.icons8.com/ios-filled/100/44476a/certificate.png" alt="DemoCert"></CertLogo>
+          </a>
         </CertBox>
       </Description>
       <div className="m-8"></div>
