@@ -3,12 +3,12 @@ import styled from 'styled-components'
 import hash from 'object-hash'
 import { useWeb3 } from '../hooks/useWeb3'
 import { CertsRoute, UploadMsg } from 'src/consts'
-import { Data } from 'src/types'
+import { Certificate } from 'src/types'
 import { Loading } from '@nextui-org/react'
 import { useNavigate } from 'react-router-dom'
 
 type Props = {
-  onSet: (data: Data | undefined) => void
+  onSet: (certificate: Certificate) => void
 }
 
 export default function Home({ onSet }: Props) {
@@ -24,16 +24,15 @@ export default function Home({ onSet }: Props) {
       reader.readAsText(file[0])
       reader.addEventListener('load', async () => {
         if (typeof reader.result === 'string') {
-          const obj = JSON.parse(reader.result)
-          const certificateId: string = obj.certificateId ?? ''
+          const obj:Certificate = JSON.parse(reader.result)
+          const certificateId: string = obj.issuer.certificateId ?? ''
           const certificateDataHash: string = hash(obj.data) ?? ''
           const certificateHash = await getStudent(certificateId)
           if (certificateDataHash === certificateHash) {
-            onSet(obj.data)
-
+            onSet(obj)
             navigate(CertsRoute.Result)
           } else {
-            onSet(undefined)
+            onSet(obj)
             navigate(CertsRoute.Result)
           }
         } else {

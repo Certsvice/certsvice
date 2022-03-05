@@ -14,19 +14,16 @@ export interface Certificate {
 }
 export interface Data {
   name: string
-  birthdate: string
-  birthplace: string
-  previousCertificates: string
-  institute: string
+  university: string
   studentId: string
   identificationNumber: string
-  nationality: string
   addmissionDate: string
   graduationDate: string
-  schoolOf: string
+  program: string
+  faculty: string
   degree: string
-  dateOfIssue: string
-  certificateId: string
+  degreeName: string
+  issuedOn: string
   transcript?: TranscriptEntity[] | null
 }
 export interface TranscriptEntity {
