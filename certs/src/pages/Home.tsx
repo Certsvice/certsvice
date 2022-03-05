@@ -2,40 +2,58 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import hash from 'object-hash'
 import { useWeb3 } from '../hooks/useWeb3'
+import { CertsRoute, UploadMsg } from 'src/consts'
+import { Data } from 'src/types'
+import { Loading } from '@nextui-org/react'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {
-  onSet: (data: []) => void
+  onSet: (data: Data | undefined) => void
 }
 
 export default function Home({ onSet }: Props) {
-  const [dropMsg, setDropMsg] = useState('Drag and drop your certsvice file')
-  const [data, setData] = useState(String)
-  const [hashData, setHashData] = useState(String)
+  const navigate = useNavigate()
+  const [dragOver, setDragOver] = useState(false)
+  const [loading, setLoading] = useState(false)
   const { getStudent } = useWeb3()
 
-  const getInput = async (file: any) => {
-    console.log(file[0])
+  const getInput = async (file: FileList | Blob[] | null) => {
     const reader = new FileReader()
-    if (file[0]) {
+    setLoading(true)
+    if (file && file[0]) {
       reader.readAsText(file[0])
-    }
-    reader.addEventListener(
-      'load',
-      async () => {
-        // this will then display a text file
+      reader.addEventListener('load', async () => {
         if (typeof reader.result === 'string') {
           const obj = JSON.parse(reader.result)
-          setData(obj)
-          setHashData(hash(obj.data))
-          console.log(await getStudent('1'))
-          onSet(await getStudent('1'))
-          console.log('Data from file upload = ', hash(obj.data))
+          const certificateId: string = obj.certificateId ?? ''
+          const certificateDataHash: string = hash(obj.data) ?? ''
+          const certificateHash = await getStudent(certificateId)
+          if (certificateDataHash === certificateHash) {
+            onSet(obj.data)
+
+            navigate(CertsRoute.Result)
+          } else {
+            onSet(undefined)
+            navigate(CertsRoute.Result)
+          }
         } else {
-          setData('')
+          // setData('')
         }
-      },
-      false
-    )
+      })
+      setLoading(false)
+    } else {
+      setLoading(false)
+      //alert error
+    }
+  }
+
+  async function handleUpload(e: React.DragEvent<HTMLDivElement>, isDragOver: boolean, onDrop?: Promise<void>) {
+    e.preventDefault()
+    e.stopPropagation()
+    setDragOver(isDragOver)
+    if (onDrop) {
+      await onDrop
+    }
   }
   return (
     <Content>
@@ -53,49 +71,44 @@ export default function Home({ onSet }: Props) {
       </Description>
       <div className="m-8"></div>
       <UploadBox
-        id="parent"
-        onDragOver={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          document.getElementById('child')!.style.pointerEvents = 'none'
-          document.getElementById('parent')!.style.boxShadow =
-            'inset 5px 5px 10px #c4c4ca, inset -5px -5px 10px #ffffff'
-          setDropMsg('Release to Upload')
-        }}
-        onDragLeave={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          document.getElementById('child')!.style.pointerEvents = 'auto'
-          document.getElementById('parent')!.style.boxShadow = '5px 5px 10px #c4c4ca, -5px -5px 10px #ffffff'
-          setDropMsg('Drag and drop your certsvice file')
-        }}
-        onDrop={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          document.getElementById('child')!.style.pointerEvents = 'auto'
-          document.getElementById('parent')!.style.boxShadow = '5px 5px 10px #c4c4ca, -5px -5px 10px #ffffff'
-          getInput(e.dataTransfer.files)
-          setDropMsg('Drag and drop your certsvice file')
+        onDragOver={(e) => handleUpload(e, true)}
+        onDragLeave={(e) => handleUpload(e, false)}
+        onDrop={(e) => handleUpload(e, false, getInput(e.dataTransfer.files))}
+        style={{
+          boxShadow: `
+          ${dragOver ? 'inset' : ''} 5px 5px 10px #c4c4ca,
+          ${dragOver ? 'inset' : ''} -5px -5px 10px #ffffff `,
         }}
       >
-        <input
-          id="getUpload"
-          type="file"
-          onChange={(e) => getInput(e.target.files)}
-          onClick={(e) => (e.currentTarget.value = '')}
-        ></input>
-        <Upload id="child">
-          <img src="https://img.icons8.com/ios/100/44476a/drag-and-drop.png" alt="dragdrop" />
-          <DragDrop>
-            <h6></h6>
-          </DragDrop>
-          <Separate>
-            <div></div>
-            <p>or</p>
-            <div></div>
-          </Separate>
-          <UploadBtn htmlFor="getUpload">Choose File</UploadBtn>
-        </Upload>
+        {loading ? (
+          <Loading size="xl" css={{ color: '#44476a' }} />
+        ) : (
+          <Upload>
+            <img
+              style={{ pointerEvents: 'none' }}
+              src="https://img.icons8.com/ios/100/44476a/drag-and-drop.png"
+              alt="dragdrop"
+            />
+            <DragDrop>
+              <h6>{dragOver ? UploadMsg.DragOver : UploadMsg.DragLeave}</h6>
+            </DragDrop>
+            <Separate>
+              <div></div>
+              <p>or</p>
+              <div></div>
+            </Separate>
+
+            <UploadBtn>
+              <input
+                type="file"
+                accept=".json"
+                onChange={(e) => getInput(e.target.files)}
+                onClick={(e) => (e.currentTarget.value = '')}
+              ></input>
+              Choose File
+            </UploadBtn>
+          </Upload>
+        )}
       </UploadBox>
     </Content>
   )
@@ -106,6 +119,7 @@ const Separate = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  pointer-events: none;
   width: 100%;
   margin: 1rem 0;
   div {
@@ -117,11 +131,11 @@ const Separate = styled.div`
   p {
     padding: 0 2rem;
     font-size: 1rem;
-    margin-bottom: 0;
   }
 `
 
 const DragDrop = styled.div`
+  pointer-events: none;
   h6 {
     margin: 1rem 0 0;
   }
@@ -154,7 +168,7 @@ const Upload = styled.div`
   }
 `
 
-const UploadBox = styled.label`
+const UploadBox = styled.div`
   max-width: 500px;
   height: 500px;
   flex-wrap: wrap;
@@ -163,27 +177,22 @@ const UploadBox = styled.label`
   justify-content: center;
   align-items: center;
   margin: 0;
-
+  cursor: pointer;
   width: 100%;
   border-radius: 50px;
   background: #e6e7ee;
-  box-shadow: 5px 5px 10px #c4c4ca, -5px -5px 10px #ffffff;
-
   input {
     position: static;
     width: 100%;
     height: 100%;
     display: none;
   }
-
-  /* &:hover {
-    box-shadow: inset 5px 5px 10px #c4c4ca, inset -5px -5px 10px #ffffff;
-  } */
 `
 
 const CertLogo = styled.img`
   height: 80px;
   animation: pulsing 3s infinite alternate;
+  cursor: move;
   @keyframes pulsing {
     0%,
     100% {
