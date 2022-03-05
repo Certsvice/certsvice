@@ -10,11 +10,12 @@ export default function Transcript({ certificate }: Props) {
   const { transcript } = data
   return (
     <div
-      className="flex flex-col w-full h-auto rounded-b-3xl rounded-tr-3xl p-6"
       style={{
-        minHeight: '500px',
-        backgroundColor: '#e6e7ee',
-        boxShadow: ` 5px 5px 10px #c4c4ca, -5px -5px 10px #ffffff `,
+        padding: '10px',
+        border: '8px solid #44476a',
+        height: '100%',
+        width: '100%',
+        color: '#44476a',
       }}
     >
       <Text size="1rem" weight="semibold">
