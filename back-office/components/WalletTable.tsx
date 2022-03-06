@@ -36,7 +36,7 @@ export default function WalletTable() {
       key: 'verify',
       render: (tags: string) => {
         return (
-          <Tag color={tags === 'true' ? 'green' : 'volcano'} key={tags}>
+          <Tag color={tags === 'verified' ? 'green' : 'volcano'} key={tags}>
             {tags.toUpperCase()}
           </Tag>
         )

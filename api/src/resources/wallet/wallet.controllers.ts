@@ -3,7 +3,7 @@ import express from 'express'
 import { Wallet } from './wallet.model'
 
 export const getWallets = async (req: express.Request, res: express.Response) => {
-  const data = await Wallet.find().select('-createdAt -updatedAt').populate('owner')
+  const data = await Wallet.find().populate('owner')
   if (!data) {
     return res.status(404).end()
   }

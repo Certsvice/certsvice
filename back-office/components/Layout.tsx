@@ -2,9 +2,10 @@ import { Layout, Menu, Breadcrumb, Typography } from 'antd'
 import { useGuardContext } from './GuardRoute'
 const { Title } = Typography
 const { Header, Content, Footer } = Layout
-import router from 'next/router'
+import { useRouter } from 'next/router'
 
 const LayoutPage: React.FC = ({ children }) => {
+  const router = useRouter()
   const { logout } = useGuardContext()
   return (
     <Layout className="layout">

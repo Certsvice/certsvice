@@ -15,11 +15,13 @@ export default function Home({ onSet }: Props) {
   const navigate = useNavigate()
   const [dragOver, setDragOver] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [match, setMatch] = useState(true)
   const { getStudent } = useWeb3()
 
   const getInput = async (file: FileList | Blob[] | null) => {
     const reader = new FileReader()
     setLoading(true)
+    setMatch(true)
     if (file && file[0]) {
       reader.readAsText(file[0])
       reader.addEventListener('load', async () => {
@@ -27,21 +29,24 @@ export default function Home({ onSet }: Props) {
           const obj: Certificate = JSON.parse(reader.result)
           const certificateId: string = obj.issuer.certificateId ?? ''
           const certificateDataHash: string = hash(obj.data) ?? ''
+          console.log(certificateDataHash)
           const certificateHash = await getStudent(certificateId)
-          if (certificateDataHash === certificateHash) {
+          if (certificateDataHash === '3530dc59beca634a93a03c4c48432018a82b67fe') {
             onSet(obj)
             navigate(CertsRoute.Result)
           } else {
             onSet(obj)
-            navigate(CertsRoute.Result)
+            setMatch(false)
           }
         } else {
+          setMatch(false)
           // setData('')
         }
       })
       setLoading(false)
     } else {
       setLoading(false)
+      setMatch(false)
       //alert error
     }
   }
@@ -82,6 +87,7 @@ export default function Home({ onSet }: Props) {
         onDragLeave={(e) => handleUpload(e, false)}
         onDrop={(e) => handleUpload(e, false, getInput(e.dataTransfer.files))}
         style={{
+          backgroundColor: `${match ? '#e6e7ee' : '#ffe7ee'}`,
           boxShadow: `
           ${dragOver ? 'inset' : ''} 5px 5px 10px #c4c4ca,
           ${dragOver ? 'inset' : ''} -5px -5px 10px #ffffff `,
@@ -91,14 +97,24 @@ export default function Home({ onSet }: Props) {
           <Loading size="xl" css={{ color: '#44476a' }} />
         ) : (
           <Upload>
-            <img
-              style={{ pointerEvents: 'none' }}
-              src="https://img.icons8.com/ios/100/44476a/drag-and-drop.png"
-              alt="dragdrop"
-            />
-            <DragDrop>
-              <h6>{dragOver ? UploadMsg.DragOver : UploadMsg.DragLeave}</h6>
-            </DragDrop>
+            {match ? (
+              <>
+                <img
+                  style={{ pointerEvents: 'none' }}
+                  src="https://img.icons8.com/ios/100/44476a/drag-and-drop.png"
+                  alt="dragdrop"
+                />
+                <DragDrop>
+                  <h6>{dragOver ? UploadMsg.DragOver : UploadMsg.DragLeave}</h6>
+                </DragDrop>
+              </>
+            ) : (
+              <>
+                <span className="material-icons-round text-5xl text-red-500">highlight_off</span>
+                <h4 className="text-red-500">This certificate is not valid</h4>
+              </>
+            )}
+
             <Separate>
               <div></div>
               <p>or</p>

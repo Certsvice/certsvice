@@ -1,16 +1,11 @@
 import { Router } from 'express'
-import controllers from './student.controllers'
+import { getMany, createOne, getOne } from './student.controllers'
 
 const router = Router()
 
 // /api/student
-router.route('/').get(controllers.getMany).post(controllers.createOne)
-
+router.route('/').get(getMany).post(createOne)
+router.route('/:id').get(getOne)
 // /api/student/:id
-router
-  .route('/:id')
-  .get(controllers.getOne)
-  .put(controllers.updateOne)
-  .delete(controllers.removeOne)
 
 export default router

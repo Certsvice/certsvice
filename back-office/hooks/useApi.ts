@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Regis, Wallet } from 'types'
+import { Data, Regis, Wallet } from 'types'
 
 export function useApi() {
   async function getWallets() {
@@ -15,8 +15,15 @@ export function useApi() {
   }
 
   async function signUp(regis: Regis) {
+    console.log(regis)
     const url = `http://localhost:8080/api/signup`
-    const res = await axios.post(url, { body: regis })
+    const res = await axios.post(url, regis)
+    return res
+  }
+
+  async function createStudent(data: Data, certificateId: string, _id: string) {
+    const url = `http://localhost:8080/api/student`
+    const res = await axios.post(url, { data, certificateId, _id })
     return res
   }
 
@@ -26,5 +33,17 @@ export function useApi() {
     return data
   }
 
-  return { getWallets, getWallet, getUniversitys, signUp }
+  async function getStudent(id: string) {
+    const url = `http://localhost:8080/api/student/${id ?? '1234'}`
+    const { data } = await axios.get(url)
+    return data
+  }
+
+  async function getStudents() {
+    const url = `http://localhost:8080/api/student`
+    const { data } = await axios.get(url)
+    return data
+  }
+
+  return { getWallets, getWallet, getUniversitys, signUp, getStudents, getStudent, createStudent }
 }

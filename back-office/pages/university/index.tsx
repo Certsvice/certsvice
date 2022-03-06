@@ -1,17 +1,16 @@
 import { PageHeader } from 'antd'
-import Title from 'components/Title'
-import WalletTable from 'components/WalletTable'
+import StudentTable from 'components/StudentTable'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 
-const Home: NextPage = () => {
+const University: NextPage = () => {
   const router = useRouter()
   return (
     <div className="container mx-auto">
       <PageHeader className="site-page-header" title="รายการลงทะเบียน" />
-      <WalletTable />
+      <StudentTable />
       <div className="w-full flex justify-center">
-        <button className="px-6 mx-4 text-white bg-blue-500 border rounded-lg h-8" onClick={() => router.replace('/register')}>
+        <button className="px-6 mx-4 text-white bg-blue-500 border rounded-lg h-8" onClick={() => router.replace('/university/register')}>
           ลงทะเบียน
         </button>
       </div>
@@ -19,4 +18,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default University

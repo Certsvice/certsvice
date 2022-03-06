@@ -1,4 +1,4 @@
-import { Form, Input, Button, Select } from 'antd'
+import { Form, Input, Button, Select, message, Space } from 'antd'
 import { useApi } from 'hooks/useApi'
 import { useWeb3 } from 'hooks/useWeb3'
 import { useEffect, useState } from 'react'
@@ -9,6 +9,7 @@ export default function AddUniversity() {
   const [data, setData] = useState<University[]>([])
   const { getUniversitys, signUp } = useApi()
   const { addUniversity } = useWeb3()
+  const [waiting, setWaiting] = useState(false)
 
   const layout = {
     labelCol: { span: 8 },
@@ -22,16 +23,33 @@ export default function AddUniversity() {
 
   const onFinish = async (values: Regis) => {
     try {
+      setWaiting(true)
       const res = await addUniversity({ address: values.address, owner: values.owner })
-      await signUp({ address: values.address, owner: values.owner })
-    } catch (e) {
-      console.log(e)
+      if (res.blockHash) {
+        await signUp({ address: values.address, owner: values.owner })
+        success('ลงทะเบียนสำเร็จ')
+      } else {
+        error('ไม่สามารถลงทะเบียนได้ โปรติดต่อ Admin')
+      }
+      setWaiting(false)
+    } catch {
+      error('ไม่สามารถลงทะเบียนได้ โปรติดต่อ Admin')
+      setWaiting(false)
     }
   }
 
   const onReset = () => {
     form.resetFields()
   }
+
+  const success = (msg?: string) => {
+    message.success(msg)
+  }
+
+  const error = (msg?: string) => {
+    message.error(`${msg}`)
+  }
+
   async function fetchWallets() {
     try {
       const res = await getUniversitys()
@@ -39,7 +57,7 @@ export default function AddUniversity() {
         setData(res)
       }
     } catch (e) {
-      console.error(e)
+      error()
     }
   }
   useEffect(() => {
@@ -73,10 +91,10 @@ export default function AddUniversity() {
           }
         </Form.Item>
         <Form.Item {...tailLayout}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" disabled={waiting}>
             Submit
           </Button>
-          <Button htmlType="button" onClick={onReset}>
+          <Button htmlType="button" onClick={onReset} disabled={waiting}>
             Reset
           </Button>
         </Form.Item>

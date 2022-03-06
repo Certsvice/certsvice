@@ -4,9 +4,10 @@ import { dayjs } from 'helpers/datetime'
 
 import { useGuardContext } from '../components/GuardRoute'
 import LoginBtn from './LoginBtn'
-import router from 'next/router'
+import { useRouter } from 'next/router'
 
 export default function Login() {
+  const router = useRouter()
   const { login, isAuthorized } = useGuardContext()
   const { getChain, getAccountInject, getOwner, getUniversity, changeChain, getToken } = useWeb3()
 
@@ -20,7 +21,7 @@ export default function Login() {
           router.push('/')
         } else if (await getUniversity()) {
           login(await getToken(account, Role.UNIVERSITY))
-          router.push('/register')
+          router.push('/university')
         }
       }
     } else {

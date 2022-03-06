@@ -13,3 +13,4 @@ export const getMany = async (req: express.Request, res: express.Response) => {
     return res.status(400).end()
   }
 }
+

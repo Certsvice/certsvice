@@ -52,6 +52,16 @@ export function useWeb3() {
     return await certsvice.methods.addUniversity(regis.address, regis.owner).send({ from: account })
   }
 
+  async function addStudent(hash: string, id: string) {
+    const account = await getAccount()
+    return await certsvice.methods.addStudent(hash, id).send({ from: account })
+  }
+
+  async function deleteStudent(id: string) {
+    const account = await getAccount()
+    return await certsvice.methods.deleteStudent(id).send({ from: account })
+  }
+
   async function getUniversity(): Promise<string> {
     const account = await getAccount()
     return await certsvice.methods.getUniversity(account).call()
@@ -91,5 +101,7 @@ export function useWeb3() {
     getToken,
     recoverToken,
     addUniversity,
+    addStudent,
+    deleteStudent,
   }
 }
