@@ -7,6 +7,13 @@ export enum CertsRoute {
 export enum UploadMsg {
   DragOver = 'Release to Upload',
   DragLeave = 'Drag and drop your certsvice file',
+  Tampered = 'Certificate has been tampered with',
+  TamperedDetail = 'We encountered an internal error and cannot determine the cause, please try again later. If this issue persists, contact us using the feedback link below.',
+}
+
+export enum UploadBtnMsg {
+  ChooseFile = 'Choose File',
+  TryAnother = 'Try another',
 }
 
 export enum NavbarState {
