@@ -1,12 +1,12 @@
-import { Button, Card, Col, Row, Spacer, Text } from '@nextui-org/react'
+import { Button } from '@nextui-org/react'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useReactToPrint } from 'react-to-print'
 import CertificatePage from 'src/components/Certificate'
 import Transcript from 'src/components/Transcript'
 import { CertsRoute } from 'src/consts'
 import { Certificate } from 'src/types'
 import styled from 'styled-components'
-import { useReactToPrint } from 'react-to-print'
 
 type Props = {
   certificate: Certificate

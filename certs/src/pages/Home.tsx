@@ -1,13 +1,11 @@
-import { useState } from 'react'
-import styled from 'styled-components'
-import hash from 'object-hash'
-import { useWeb3 } from '../hooks/useWeb3'
-import { CertsRoute, UploadBtnMsg, UploadMsg, UploadStatus } from 'src/consts'
-import { Certificate } from 'src/types'
 import { Loading } from '@nextui-org/react'
+import hash from 'object-hash'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useDebounce } from 'src/hooks/useDebounce'
 import UploadButton from 'src/components/UploadBtn'
+import { CertsRoute, UploadMsg, UploadStatus } from 'src/consts'
+import { Certificate } from 'src/types'
+import styled from 'styled-components'
 
 type Props = {
   onSet: (certificate: Certificate) => void
@@ -18,12 +16,7 @@ export default function Home({ onSet }: Props) {
   const [dragOver, setDragOver] = useState(false)
   const [loading, setLoading] = useState(false)
   const [match, setMatch] = useState<UploadStatus>(UploadStatus.Match)
-  const { getStudent } = useWeb3()
-  const timeoutFunction = async () => {
-    setTimeout(() => {
-      console.log('timeout')
-    }, 5000)
-  }
+  //const { getStudent } = useWeb3()
 
   const getInput = async (file: FileList | null) => {
     try {
@@ -38,7 +31,7 @@ export default function Home({ onSet }: Props) {
             const obj: Certificate = JSON.parse(reader.result)
             const certificateId: string = obj?.issuer?.certificateId ?? ''
             const certificateDataHash: string = hash(obj?.data) ?? ''
-            const certificateHash = await getStudent(certificateId)
+            //const certificateHash = await getStudent(certificateId)
 
             console.log(certificateDataHash)
             if (certificateDataHash === '3530dc59beca634a93a03c4c48432018a82b67fe' && certificateId) {
