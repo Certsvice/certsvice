@@ -2,11 +2,12 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import hash from 'object-hash'
 import { useWeb3 } from '../hooks/useWeb3'
-import { CertsRoute, UploadBtnMsg, UploadMsg } from 'src/consts'
+import { CertsRoute, UploadBtnMsg, UploadMsg, UploadStatus } from 'src/consts'
 import { Certificate } from 'src/types'
 import { Loading } from '@nextui-org/react'
 import { useNavigate } from 'react-router-dom'
 import { useDebounce } from 'src/hooks/useDebounce'
+import UploadButton from 'src/components/UploadBtn'
 
 type Props = {
   onSet: (certificate: Certificate) => void
@@ -16,7 +17,7 @@ export default function Home({ onSet }: Props) {
   const navigate = useNavigate()
   const [dragOver, setDragOver] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [match, setMatch] = useState(true)
+  const [match, setMatch] = useState<UploadStatus>(UploadStatus.Match)
   const { getStudent } = useWeb3()
   const timeoutFunction = async () => {
     setTimeout(() => {
@@ -24,11 +25,11 @@ export default function Home({ onSet }: Props) {
     }, 5000)
   }
 
-  const getInput = async (file: FileList | Blob[] | null) => {
+  const getInput = async (file: FileList | null) => {
     try {
       const reader = new FileReader()
       setLoading(true)
-      setMatch(true)
+      setMatch(UploadStatus.Match)
       console.log(file)
       if (file && file.length === 1) {
         reader.readAsText(file[0])
@@ -42,31 +43,34 @@ export default function Home({ onSet }: Props) {
             console.log(certificateDataHash)
             if (certificateDataHash === '3530dc59beca634a93a03c4c48432018a82b67fe' && certificateId) {
               onSet(obj)
-
+              setMatch(UploadStatus.Match)
               navigate(CertsRoute.Result)
-            } else {
-              onSet(obj)
+            } else if (!certificateId) {
+              //onSet(obj)
               setLoading(false)
-              setMatch(false)
+              setMatch(UploadStatus.Error)
+            } else {
+              setLoading(false)
+              setMatch(UploadStatus.Tempered)
             }
           } else {
             setLoading(false)
-            setMatch(false)
+            setMatch(UploadStatus.Error)
             // setData('')
           }
         })
       } else if (file && file.length > 1) {
         setLoading(false)
-        setMatch(false)
+        setMatch(UploadStatus.Error)
         //alert error
       } else {
         setLoading(false)
-        setMatch(false)
+        setMatch(UploadStatus.Error)
         //alert error
       }
     } catch (e) {
       setLoading(false)
-      setMatch(false)
+      setMatch(UploadStatus.Error)
       alert('error')
     }
   }
@@ -87,7 +91,7 @@ export default function Home({ onSet }: Props) {
         </p>
         <p style={{ fontWeight: 'bold' }}>ผ่านระบบ Blockchain ที่ปลอดภัยและมีความถูกต้อง</p>
         <p style={{ fontWeight: 'bold' }}>"ง่ายครบจบในที่เดียว".</p>
-        <CertBox>
+        <CertBox draggable={true}>
           <a
             href="/demoCertificate.json"
             download="demoCertificate"
@@ -103,12 +107,11 @@ export default function Home({ onSet }: Props) {
       <UploadBox
         onDragOver={(e) => handleUpload(e, true)}
         onDragLeave={(e) => {
-          console.log('leave')
           handleUpload(e, false)
         }}
         onDrop={(e) => handleUpload(e, false, getInput(e.dataTransfer.files))}
         style={{
-          backgroundColor: `${loading || match ? '#e6e7ee' : '#ffe7ee'}`,
+          backgroundColor: `${loading || match === UploadStatus.Match ? '#e6e7ee' : '#ffe7ee'}`,
           boxShadow: `
           ${dragOver ? 'inset' : ''} 5px 5px 10px #c4c4ca,
           ${dragOver ? 'inset' : ''} -5px -5px 10px #ffffff `,
@@ -121,7 +124,7 @@ export default function Home({ onSet }: Props) {
           </>
         ) : (
           <Upload className={`${dragOver ? '!pointer-events-none' : ' pointer-events-auto'}`}>
-            {match ? (
+            {match === UploadStatus.Match ? (
               <DragDrop>
                 <img
                   style={{ pointerEvents: 'none', width: '100px' }}
@@ -131,11 +134,27 @@ export default function Home({ onSet }: Props) {
                 <h6>{dragOver ? UploadMsg.DragOver : UploadMsg.DragLeave}</h6>
               </DragDrop>
             ) : (
-              <DragDrop className="text-red-500 text-center">
-                <span className="material-icons-round text-5x">highlight_off</span>
-                <h4>{UploadMsg.Tampered}</h4>
-                <h6>{UploadMsg.TamperedDetail}</h6>
-              </DragDrop>
+              <>
+                {match === UploadStatus.Tempered ? (
+                  <DragDrop className="text-red-500 text-center ">
+                    <div className="flex flex-row items-center mb-2">
+                      <span className="material-icons-round text-5x mr-1">highlight_off</span>
+                      <h4 className=" text-gray-800 mb-0">{UploadMsg.NotValid}</h4>
+                    </div>
+                    <h5>{UploadMsg.Tampered}</h5>
+                    <h6>{UploadMsg.TamperedDetail}</h6>
+                  </DragDrop>
+                ) : (
+                  <DragDrop className="text-red-500 text-center ">
+                    <div className="flex flex-row items-center mb-2">
+                      <span className="material-icons-round text-5x mr-1">highlight_off</span>
+                      <h4 className=" text-gray-800 mb-0">{UploadMsg.NotValid}</h4>
+                    </div>
+                    <h5>{UploadMsg.Error}</h5>
+                    <h6>{UploadMsg.ErrorDetail}</h6>
+                  </DragDrop>
+                )}
+              </>
             )}
 
             <Separate className={`${match ? '' : 'text-red-500'}`}>
@@ -143,17 +162,7 @@ export default function Home({ onSet }: Props) {
               <p>or</p>
               <div></div>
             </Separate>
-
-            <UploadBtn className=" cursor-pointer" style={{ backgroundColor: `${match ? '#44476a' : '#a91e2c'} ` }}>
-              {match ? UploadBtnMsg.ChooseFile : UploadBtnMsg.TryAnother}
-              <input
-                id="getFile"
-                type="file"
-                accept=".json"
-                onChange={(e) => getInput(e.target.files)}
-                onClick={(e) => (e.currentTarget.value = '')}
-              ></input>
-            </UploadBtn>
+            <UploadButton match={match} getFile={async (file) => await getInput(file)}></UploadButton>
           </Upload>
         )}
       </UploadBox>
@@ -185,22 +194,10 @@ const DragDrop = styled.div`
   flex-direction: column;
   align-items: center;
   h6 {
-    margin: 1rem 0 0;
+    margin: 0;
   }
 `
 
-const UploadBtn = styled.label`
-  border: none;
-  color: white;
-  padding: 0.5rem;
-  cursor: pointer;
-  border-radius: 7px;
-  background: #44476a;
-  &:hover {
-    background: white !important;
-    color: #44476a;
-  }
-`
 const Upload = styled.div`
   border: none;
   width: 66%;
@@ -258,6 +255,8 @@ const CertBox = styled.div`
   align-items: center;
   align-content: center;
   justify-content: center;
+  user-select: none;
+  -webkit-user-drag: element;
 `
 const Description = styled.div`
   max-width: 400px;

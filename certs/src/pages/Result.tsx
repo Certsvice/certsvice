@@ -22,9 +22,8 @@ export default function Result({ certificate }: Props) {
   })
 
   useEffect(() => {
-    console.log(certificate)
     if (!certificate.issuer.certificateId) {
-      //navigate(CertsRoute.Index)
+      navigate(CertsRoute.Index)
     }
   }, [certificate])
 

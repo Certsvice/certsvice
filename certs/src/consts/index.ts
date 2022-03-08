@@ -4,11 +4,20 @@ export enum CertsRoute {
   Result = '/result',
 }
 
+export enum UploadStatus {
+  Match = 'Match',
+  Error = 'Error',
+  Tempered = 'Tempered',
+}
+
 export enum UploadMsg {
   DragOver = 'Release to Upload',
   DragLeave = 'Drag and drop your certsvice file',
+  NotValid = 'This certificate is not valid',
   Tampered = 'Certificate has been tampered with',
-  TamperedDetail = 'We encountered an internal error and cannot determine the cause, please try again later. If this issue persists, contact us using the feedback link below.',
+  TamperedDetail = 'The contents of this certificate are inaccurate and have been tampered with.',
+  Error = "Whoops! It's not you, it's us",
+  ErrorDetail = 'We encountered an internal error and cannot determine the cause, please try again later.',
 }
 
 export enum UploadBtnMsg {
