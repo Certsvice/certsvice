@@ -21,8 +21,6 @@ jobs:
         with:
           node-version: "16"
       - run: npm install
-      - name: Create .env file
-        run:
       - name: Build
         run: REACT_APP_BUILD_TIME=$(date +%Y%m%d%H%M%S) npm run build
       - uses: aws-actions/configure-aws-credentials@v1
