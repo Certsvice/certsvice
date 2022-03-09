@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: certsvice-api
+spec:
+  selector:
+    matchLabels:
+      app: certsvice-api
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: certsvice-api
+    spec:
+      containers:
+        - name: certsvice-api
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  key: JWT_SECRET
+                  name: certsvice-configmap
+            - name: JWT_EXP
+              valueFrom:
+                configMapKeyRef:
+                  key: JWT_EXP
+                  name: certsvice-configmap

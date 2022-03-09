@@ -1,16 +1,9 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: certsvice-api
-spec:
-  selector:
-    matchLabels:
-      app: certsvice-api
-  minReadySeconds: 5
-  template:
-    metadata:
-      labels:
-        app: certsvice-api
-    spec:
-      containers:
-        - name: certsvice-api
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - deployment.yaml
+  - service.yaml
+configMapGenerator:
+  - name: certsvice-configmap
+    envs:
+      - .env
