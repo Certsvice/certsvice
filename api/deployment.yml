@@ -14,6 +14,7 @@ spec:
     spec:
       containers:
         - name: certsvice-api
+          image: certsvice-api
           env:
             - name: JWT_SECRET
               valueFrom:
