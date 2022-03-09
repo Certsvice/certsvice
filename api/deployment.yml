@@ -25,3 +25,8 @@ spec:
                 configMapKeyRef:
                   key: JWT_EXP
                   name: certsvice-configmap
+            - name: DB_URI
+              valueFrom:
+                configMapKeyRef:
+                  key: DB_URI
+                  name: certsvice-configmap

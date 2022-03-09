@@ -53,7 +53,8 @@ jobs:
       - name: Create .env file
         run: |
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env &&
-          echo "JWT_EXP=${{ secrets.JWT_EXP }}" >> .env
+          echo "JWT_EXP=${{ secrets.JWT_EXP }}" >> .env &&
+          echo "DB_URI=${{ secrets.DB_URI }}" >> .env
       - name: Build
         run: npm run build
       # Configure Workload Identity Federation and generate an access token.
