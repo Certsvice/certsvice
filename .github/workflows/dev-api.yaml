@@ -26,7 +26,7 @@ env:
   GAR_LOCATION: asia-southeast1 # TODO: update region of the Artifact Registry
   GKE_CLUSTER: certsvice # TODO: update to cluster name
   GKE_ZONE: asia-southeast1-a # TODO: update to cluster zone
-  DEPLOYMENT_NAME: gke-api # TODO: update to deployment name
+  DEPLOYMENT_NAME: certsvice-api # TODO: update to deployment name
   REPOSITORY: certsvice # TODO: update to Artifact Registry docker repository
   IMAGE: certsvice-api
 
