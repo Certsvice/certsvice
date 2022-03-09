@@ -4,11 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "babel src --out-dir dist",
+    "build": "tsc",
     "dev": "nodemon --exec npm run start",
-    "restart": "rimraf dist && npm run build && npm run start",
-    "start": "node src/server.ts",
-    "serve": "nodemon ./src/index.ts"
+    "start": "nodemon ./src/index.ts"
   },
   "repository": {
     "type": "git",
