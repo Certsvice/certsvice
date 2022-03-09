@@ -13,6 +13,6 @@ spec:
       targetPort: 8080
   selector:
     app: certsvice-api
-  type: NodePort
+  type: LoadBalancer
 status:
   loadBalancer: {}
