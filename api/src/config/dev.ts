@@ -1,3 +1,3 @@
 export const config = {
-  dbUrl: 'mongodb://localhost:27017/certsvice',
+  dbUrl: 'mongodb+srv://certsvice:Nadee0810657400@certsvice.f1swz.mongodb.net/certsvice?retryWrites=true&w=majority',
 }
