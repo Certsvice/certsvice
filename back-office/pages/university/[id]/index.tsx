@@ -1,10 +1,9 @@
+import { Descriptions, PageHeader } from 'antd'
 import { useApi } from 'hooks/useApi'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Certificate } from 'types'
-import { Descriptions, Badge, Tag, PageHeader } from 'antd'
-import { dayjs } from 'helpers/datetime'
 
 const EditUniversity: NextPage = () => {
   const router = useRouter()
@@ -16,14 +15,13 @@ const EditUniversity: NextPage = () => {
     try {
       if (typeof id === 'string') {
         const res = await getStudent(id?.toString() ?? '')
-        console.log(res, 'wallet')
         if (res) {
           setCertificate(res)
         }
       }
     } catch (e) {
       console.error(e)
-      router.replace('/not-found')
+      router.push('/not-found')
     }
   }
   useEffect(() => {
@@ -32,7 +30,7 @@ const EditUniversity: NextPage = () => {
 
   return (
     <div className="container mx-auto">
-      <PageHeader ghost={false} onBack={() => router.replace('/university')} title="Wallet address"></PageHeader>
+      <PageHeader ghost={false} onBack={() => router.push('/university')} title="Wallet address"></PageHeader>
       {certificate && (
         <Descriptions bordered>
           <Descriptions.Item label="ID">{}</Descriptions.Item>

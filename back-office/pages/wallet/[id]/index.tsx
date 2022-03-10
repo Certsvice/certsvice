@@ -1,10 +1,9 @@
+import { Descriptions, PageHeader, Tag } from 'antd'
 import { useApi } from 'hooks/useApi'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Wallet } from 'types'
-import { Descriptions, Badge, Tag, PageHeader } from 'antd'
-import { dayjs } from 'helpers/datetime'
 
 const WalletPage: NextPage = () => {
   const router = useRouter()
@@ -16,14 +15,13 @@ const WalletPage: NextPage = () => {
     try {
       if (typeof id === 'string') {
         const res = await getWallet(id?.toString() ?? '')
-        console.log(res, 'wallet')
         if (res) {
           setWallet(res)
         }
       }
     } catch (e) {
       console.error(e)
-      router.replace('/not-found')
+      router.push('/not-found')
     }
   }
   useEffect(() => {
@@ -32,7 +30,7 @@ const WalletPage: NextPage = () => {
 
   return (
     <div className="container mx-auto">
-      <PageHeader ghost={false} onBack={() => router.replace('/')} title="Wallet address"></PageHeader>
+      <PageHeader ghost={false} onBack={() => router.push('/')} title="Wallet address"></PageHeader>
       {wallet && (
         <Descriptions bordered>
           <Descriptions.Item label="ID">{wallet._id}</Descriptions.Item>

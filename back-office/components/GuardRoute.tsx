@@ -27,11 +27,11 @@ const GuardRoute: React.FC = ({ children }) => {
     if (account === address) {
       if (body.statement === Role.UNIVERSITY) {
         if (!router.pathname.startsWith('/university')) {
-          router.replace('/university')
+          router.push('/university')
         }
       }
     } else {
-      router.replace('/')
+      router.push('/')
       clearAccessToken()
     }
   }
@@ -48,7 +48,7 @@ const GuardRoute: React.FC = ({ children }) => {
 
   const logout = useCallback(() => {
     clearAccessToken()
-    router.replace('/')
+    router.push('/')
   }, [clearAccessToken])
 
   return (

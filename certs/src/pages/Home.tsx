@@ -33,13 +33,13 @@ export default function Home({ onSet }: Props) {
               const { issuer, data } = obj
               const { certificateId, name, certificateStore } = issuer
               const certificateHash = await getStudent(certificateId)
-              if (!data && !certificateId && !name && !certificateStore && !certificateHash) {
+              if (!data && !certificateId && !name && !certificateStore && !certificateHash.hash) {
                 setLoading(false)
                 setMatch(UploadStatus.Tempered)
                 return
               }
-              const certificateDataHash: string = hash(data) ?? ''
-              if (certificateDataHash === certificateHash) {
+              const certificateDataHash: string = hash(obj) ?? ''
+              if (certificateDataHash === certificateHash.hash) {
                 onSet(obj)
                 setMatch(UploadStatus.Match)
                 navigate(CertsRoute.Result)

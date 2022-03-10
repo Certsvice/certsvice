@@ -41,7 +41,7 @@ body {
 }
 
 .ant-btn-primary {
-  background-color: #1890ff;
+  background-color: #1890ff !important;
 }
 
 .ant-form-item-children-icon {

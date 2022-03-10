@@ -1,16 +1,15 @@
+import { Button, Modal, notification } from 'antd'
 import { Role } from 'consts'
 import { useWeb3 } from 'hooks/useWeb3'
-import { dayjs } from 'helpers/datetime'
-import { Modal, Button, notification, Alert } from 'antd'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { useGuardContext } from '../components/GuardRoute'
 import LoginBtn from './LoginBtn'
-import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
 
 export default function Login() {
   const router = useRouter()
   const { login, isAuthorized } = useGuardContext()
-  const { getChain, getAccountInject, getOwner, getUniversity, changeChain, getToken, eth, recoverToken } = useWeb3()
+  const { getChain, getAccountInject, getOwner, getUniversity, changeChain, getToken, eth } = useWeb3()
   const [api, contextHolder] = notification.useNotification()
   const openNotification = (placement: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight') => {
     api.info({
@@ -38,10 +37,10 @@ export default function Login() {
         const account = await getAccountInject()
         if (account === (await getOwner())) {
           login(await getToken(Role.OWNER))
-          router.replace('/')
+          router.push('/')
         } else if (await getUniversity()) {
           login(await getToken(Role.UNIVERSITY))
-          router.replace('/university')
+          router.push('/university')
         }
       }
     } else {
@@ -82,7 +81,6 @@ export default function Login() {
   }
 
   useEffect(() => {
-    console.log(eth.isMetaMask)
     if (!eth.isMetaMask) {
       warning()
     }

@@ -1,13 +1,10 @@
-import { Button, message, Modal, Result, Steps, Upload } from 'antd'
-import { useState } from 'react'
-import { Data1, Issuer } from 'types'
-import hash from 'object-hash'
-import { dayjs } from 'helpers/datetime'
-import { useWeb3 } from 'hooks/useWeb3'
-import { useApi } from 'hooks/useApi'
 import { LoadingOutlined } from '@ant-design/icons'
-
-const { Dragger } = Upload
+import { Button, message, Modal, Result, Steps } from 'antd'
+import { useApi } from 'hooks/useApi'
+import { useWeb3 } from 'hooks/useWeb3'
+import hash from 'object-hash'
+import { useState } from 'react'
+import { Certificate, Data, Issuer } from 'types'
 
 export default function AddStudent() {
   const { getUniversity, addStudent } = useWeb3()
@@ -36,15 +33,16 @@ export default function AddStudent() {
         reader.addEventListener('load', async () => {
           try {
             if (typeof reader.result === 'string') {
-              const obj: Data1 = JSON.parse(reader.result)
+              const obj: Certificate = JSON.parse(reader.result)
               const university = await getUniversity()
               const wallet = await getWallet(university)
               const certificateId = Date.now()
-              const DataToHash: { data: Data1; issuer: Issuer } = {
-                data: obj,
+              const DataToHash: { data: Data; issuer: Issuer } = {
+                data: obj.data,
                 issuer: { name: wallet.owner.name, certificateStore: wallet.address, certificateId: certificateId.toString() },
               }
-              const certificateDataHash = hash(DataToHash)
+              const parsedata = JSON.parse(JSON.stringify(DataToHash))
+              const certificateDataHash = hash(parsedata)
               setStep(0)
               await addStudent(certificateDataHash, certificateId.toString())
               setStep(1)
@@ -133,6 +131,7 @@ export default function AddStudent() {
               <input
                 className="hidden"
                 type="file"
+                multiple={false}
                 accept=".json"
                 onChange={(e) => getInput(e.target.files)}
                 onClick={(e) => (e.currentTarget.value = '')}
@@ -142,7 +141,7 @@ export default function AddStudent() {
           </Button>
         </div>
         <p className="ant-upload-text">Click or drag file to this area to upload</p>
-        <p className="ant-upload-hint">Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files</p>
+        <p className="ant-upload-hint font-bold text-red-500">Support only single upload.</p>
       </div>
     </div>
   )

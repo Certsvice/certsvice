@@ -8,7 +8,7 @@ const Register: NextPage = () => {
   return (
     <div className="container mx-auto flex flex-col items-center ">
       <div className="flex flex-row items-center justify-center w-full">
-        <PageHeader ghost={false} onBack={() => router.replace('/')} title="ลงทะเบียนมหาวิทยาลัย"></PageHeader>
+        <PageHeader ghost={false} onBack={() => router.push('/')} title="ลงทะเบียนมหาวิทยาลัย"></PageHeader>
         <div className="flex flex-row ml-auto">
           {/* <Button className=" pr-4" key="2">
             Operation

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Data, Regis, Wallet } from 'types'
+import { Data, Regis } from 'types'
 
 export function useApi() {
   const apiUri = `${process.env.NEXT_PUBLIC_API_URI}`
@@ -16,7 +16,6 @@ export function useApi() {
   }
 
   async function signUp(regis: Regis) {
-    console.log(regis)
     const url = `${apiUri}/api/signup`
     const res = await axios.post(url, regis)
     return res
@@ -46,5 +45,11 @@ export function useApi() {
     return data
   }
 
-  return { getWallets, getWallet, getUniversitys, signUp, getStudents, getStudent, createStudent }
+  async function deleteStudentApi(id: string) {
+    const url = `${apiUri}/api/student/${id ?? '123'}`
+    const { data } = await axios.delete(url)
+    return data
+  }
+
+  return { getWallets, getWallet, getUniversitys, signUp, getStudents, getStudent, createStudent, deleteStudentApi }
 }

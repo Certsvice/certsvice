@@ -1,16 +1,16 @@
+import { Radio, RadioChangeEvent, Table } from 'antd'
 import { useApi } from 'hooks/useApi'
-import { SetStateAction, useEffect, useMemo, useState } from 'react'
-import { Button, Radio, RadioChangeEvent, Table, Tag } from 'antd'
-import { Certificate, WalletColumn } from 'types'
-import { useRouter } from 'next/router'
 import { useWeb3 } from 'hooks/useWeb3'
+import { useEffect, useState } from 'react'
+import { Certificate, Data, Issuer } from 'types'
+import hash from 'object-hash'
 
 export default function StudentTable() {
   const [data, setData] = useState<Certificate[]>([])
-  const router = useRouter()
+  const [file, setFile] = useState<{ data: Data; issuer: Issuer }>()
   const [year, setYear] = useState(2022)
   const { deleteStudent, getUniversity } = useWeb3()
-  const { getStudents, getWallet } = useApi()
+  const { getStudents, getWallet, deleteStudentApi } = useApi()
 
   async function fetchWallet() {
     try {
@@ -26,7 +26,16 @@ export default function StudentTable() {
             addmissionDate: res.data.addmissionDate,
             graduationDate: res.data.graduationDate,
             program: res.data.program,
-            delete: { certificateId: res.certificateId, _id: res._id },
+            delete: {
+              certificateId: res.certificateId,
+              _id: res._id,
+              data: res.data,
+              issuer: {
+                name: res.issuer.owner.name,
+                certificateStore: res.issuer.address,
+                certificateId: res.certificateId,
+              },
+            },
           }
         })
         setData(data)
@@ -61,11 +70,29 @@ export default function StudentTable() {
             className="material-icons-outlined text-red-600 text-2xl cursor-pointer mr-4"
             onClick={async () => {
               await deleteStudent(data.certificateId)
+              await deleteStudentApi(data._id)
             }}
           >
             delete_forever
           </span>
-          <span className="material-icons-outlined text-blue-600 text-2xl cursor-pointer" onClick={() => {}}>
+          <span
+            className="material-icons-outlined text-blue-600 text-2xl cursor-pointer"
+            onClick={async () => {
+              const fileName = 'certsvice'
+              const json = JSON.stringify({
+                data: data.data,
+                issuer: data.issuer,
+              })
+              const blob = new Blob([json], { type: 'application/json' })
+              const href = await URL.createObjectURL(blob)
+              const link = document.createElement('a')
+              link.href = href
+              link.download = fileName + '.json'
+              document.body.appendChild(link)
+              link.click()
+              document.body.removeChild(link)
+            }}
+          >
             file_download
           </span>
         </>

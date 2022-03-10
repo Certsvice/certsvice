@@ -31,15 +31,11 @@ export interface University {
   code: string
 }
 
-export interface Data1 {
-  data: Data
-}
-
 export interface Certificate {
   _id: string
   data: Data
   certificateId: string
-  issuer: string
+  issuer: IssuerFile
   createdAt: string
   updatedAt: string
 }
@@ -77,3 +73,18 @@ export interface Issuer {
   certificateStore: string
   certificateId: string
 }
+
+export interface IssuerFile {
+  _id: string;
+  address: string;
+  owner: Owner;
+  verify: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface Owner {
+  _id: string;
+  name: string;
+  code: string;
+}
+
