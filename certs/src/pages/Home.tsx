@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import UploadButton from 'src/components/UploadBtn'
 import { CertsRoute, UploadMsg, UploadStatus } from 'src/consts'
+import { useWeb3 } from 'src/hooks/useWeb3'
 import { Certificate } from 'src/types'
 import styled from 'styled-components'
 
@@ -16,55 +17,52 @@ export default function Home({ onSet }: Props) {
   const [dragOver, setDragOver] = useState(false)
   const [loading, setLoading] = useState(false)
   const [match, setMatch] = useState<UploadStatus>(UploadStatus.Match)
-  //const { getStudent } = useWeb3()
+  const { getStudent } = useWeb3()
 
   const getInput = async (file: FileList | null) => {
     try {
-      const reader = new FileReader()
       setLoading(true)
       setMatch(UploadStatus.Match)
-      console.log(file)
+      const reader = new FileReader()
       if (file && file.length === 1) {
         reader.readAsText(file[0])
         reader.addEventListener('load', async () => {
-          if (typeof reader.result === 'string') {
-            const obj: Certificate = JSON.parse(reader.result)
-            const certificateId: string = obj?.issuer?.certificateId ?? ''
-            const certificateDataHash: string = hash(obj?.data) ?? ''
-            //const certificateHash = await getStudent(certificateId)
-
-            console.log(certificateDataHash)
-            if (certificateDataHash === '3530dc59beca634a93a03c4c48432018a82b67fe' && certificateId) {
-              onSet(obj)
-              setMatch(UploadStatus.Match)
-              navigate(CertsRoute.Result)
-            } else if (!certificateId) {
-              //onSet(obj)
-              setLoading(false)
-              setMatch(UploadStatus.Error)
+          try {
+            if (typeof reader.result === 'string') {
+              const obj: Certificate = JSON.parse(reader.result)
+              const { issuer, data } = obj
+              const { certificateId, name, certificateStore } = issuer
+              const certificateHash = await getStudent(certificateId)
+              if (!data && !certificateId && !name && !certificateStore && !certificateHash) {
+                setLoading(false)
+                setMatch(UploadStatus.Tempered)
+                return
+              }
+              const certificateDataHash: string = hash(data) ?? ''
+              if (certificateDataHash === certificateHash) {
+                onSet(obj)
+                setMatch(UploadStatus.Match)
+                navigate(CertsRoute.Result)
+              } else {
+                setLoading(false)
+                setMatch(UploadStatus.Tempered)
+              }
             } else {
               setLoading(false)
-              setMatch(UploadStatus.Tempered)
+              setMatch(UploadStatus.Error)
             }
-          } else {
+          } catch {
             setLoading(false)
             setMatch(UploadStatus.Error)
-            // setData('')
           }
         })
-      } else if (file && file.length > 1) {
-        setLoading(false)
-        setMatch(UploadStatus.Error)
-        //alert error
       } else {
         setLoading(false)
         setMatch(UploadStatus.Error)
-        //alert error
       }
     } catch (e) {
       setLoading(false)
       setMatch(UploadStatus.Error)
-      alert('error')
     }
   }
 
@@ -120,7 +118,7 @@ export default function Home({ onSet }: Props) {
             {match === UploadStatus.Match ? (
               <DragDrop>
                 <img
-                  style={{ pointerEvents: 'none', width: '100px' }}
+                  style={{ width: '100px' }}
                   src="https://img.icons8.com/ios/100/44476a/drag-and-drop.png"
                   alt="dragdrop"
                 />

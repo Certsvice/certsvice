@@ -1,10 +1,19 @@
-import { Wallet } from '../wallet/wallet.model'
+import { dayjs } from '../../helpers/datetime'
 import { Student } from './student.model'
 import express from 'express'
 
 export const getMany = async (req: express.Request, res: express.Response) => {
   try {
-    const docs = await Student.find().populate('issuer')
+    const _id = req.params.id
+    const year = req.body.year
+    const docs = await Student.find({
+      createdAt: {
+        $gte: new Date(dayjs().year(year).startOf('year').format('DD/MM/YYYY')),
+        $lte: new Date(dayjs().year(year+1).startOf('year').format('DD/MM/YYYY')),
+      },
+      issuer: _id,
+    }).populate('issuer')
+    console.log(docs)
     if (!docs) {
       return res.status(400).end()
     }

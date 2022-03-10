@@ -2,6 +2,7 @@ import { ABI, Role } from 'consts'
 import { AbiItem } from 'web3-utils'
 import Web3 from 'web3'
 import { Regis } from 'types'
+import { sign, verify } from 'web3-token'
 
 export function useWeb3() {
   const web3 = new Web3(Web3.givenProvider || 'http://localhost:8545')
@@ -67,27 +68,13 @@ export function useWeb3() {
     return await certsvice.methods.getUniversity(account).call()
   }
 
-  async function getToken(message: string, role: Role): Promise<string> {
-    const msgParams = JSON.stringify({
-      message,
-      role,
-    })
+  async function getToken(role: Role): Promise<string> {
     const from = await getAccount()
-    const params = [from, msgParams]
-    const method = 'personal_sign'
-    return await eth.request({
-      method,
-      params,
-      from,
-    })
+    return await sign(async (msgParams) => await web3.eth.personal.sign(msgParams, from, ''), { statement: role, expires_in: '1 day' })
   }
 
-  async function recoverToken(message: string, role: Role, signature: string) {
-    const msgParams = JSON.stringify({
-      message,
-      role,
-    })
-    return await web3.eth.personal.ecRecover(msgParams, signature)
+  async function recoverToken(token: string) {
+    return await verify(token)
   }
 
   return {
@@ -103,5 +90,6 @@ export function useWeb3() {
     addUniversity,
     addStudent,
     deleteStudent,
+    eth,
   }
 }

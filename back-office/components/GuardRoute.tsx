@@ -3,7 +3,7 @@ import { Role } from 'consts'
 import { useLocalStorage } from 'hooks/useLocalStorage'
 import { useWeb3 } from 'hooks/useWeb3'
 import { useRouter } from 'next/router'
-import { createContext, useCallback, useContext } from 'react'
+import { createContext, useCallback, useContext, useState } from 'react'
 import Layout from './Layout'
 
 interface GuardContextProps {
@@ -19,18 +19,22 @@ const GuardRoute: React.FC = ({ children }) => {
   const [accessToken, setAccessToken, clearAccessToken] = useLocalStorage('accessToken', '')
   const { recoverToken, getAccount } = useWeb3()
   if (accessToken) {
-    //checkPermission(accessToken)
+    checkPermission(accessToken)
   }
-  // async function checkPermission(accessToken: string) {
-  //   const account = await getAccount()
-  //   if ((await recoverToken(account, Role.OWNER, accessToken)) === account) {
-  //     router.replace('/')
-  //   } else if ((await recoverToken(account, Role.UNIVERSITY, accessToken)) === account) {
-  //     router.replace('register')
-  //   } else {
-  //     clearAccessToken()
-  //   }
-  // }
+  async function checkPermission(accessToken: string) {
+    const account = await getAccount()
+    const { address, body } = await recoverToken(accessToken)
+    if (account === address) {
+      if (body.statement === Role.UNIVERSITY) {
+        if (!router.pathname.startsWith('/university')) {
+          router.replace('/university')
+        }
+      }
+    } else {
+      router.replace('/')
+      clearAccessToken()
+    }
+  }
 
   const isAuthorized = !!accessToken
 
@@ -44,7 +48,7 @@ const GuardRoute: React.FC = ({ children }) => {
 
   const logout = useCallback(() => {
     clearAccessToken()
-    router.push('/')
+    router.replace('/')
   }, [clearAccessToken])
 
   return (

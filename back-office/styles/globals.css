@@ -50,3 +50,20 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+.ant-modal-confirm-content {
+  margin-left: 0px !important;
+}
+
+.ant-notification-notice-description {
+  margin-left: 0px !important;
+}
+
+.ant-col-8 {
+  width: auto !important;
+  max-width: none;
+}
+
+.ant-steps-item-icon .ant-steps-icon {
+  top: -5px !important;
+}

@@ -1,23 +1,9 @@
 import mongoose from 'mongoose'
-import { Certificate, TranscriptEntity } from '../../types'
 const studentSchema = new mongoose.Schema(
   {
     data: {
       type: mongoose.SchemaTypes.Mixed,
-      // {
-      //   // name: String,
-      //   // university: String,
-      //   // studentId: String,
-      //   // identificationNumber: String,
-      //   // addmissionDate: String,
-      //   // graduationDate: String,
-      //   // program: String,
-      //   // faculty: String,
-      //   // degree: String,
-      //   // degreeName: String,
-      //   // issuedOn: String,
-      //   // transcript: { name: String, semester: String, creditsEarned: Number, totalCreditEarned: Number, gpa: Number, gpax: Number },
-      // },
+
       required: true,
     },
     certificateId: {

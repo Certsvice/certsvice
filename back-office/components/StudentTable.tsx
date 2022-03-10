@@ -1,6 +1,6 @@
 import { useApi } from 'hooks/useApi'
-import { useEffect, useMemo, useState } from 'react'
-import { Button, Table, Tag } from 'antd'
+import { SetStateAction, useEffect, useMemo, useState } from 'react'
+import { Button, Radio, RadioChangeEvent, Table, Tag } from 'antd'
 import { Certificate, WalletColumn } from 'types'
 import { useRouter } from 'next/router'
 import { useWeb3 } from 'hooks/useWeb3'
@@ -8,12 +8,15 @@ import { useWeb3 } from 'hooks/useWeb3'
 export default function StudentTable() {
   const [data, setData] = useState<Certificate[]>([])
   const router = useRouter()
-  const { deleteStudent } = useWeb3()
-  const { getStudents } = useApi()
+  const [year, setYear] = useState(2022)
+  const { deleteStudent, getUniversity } = useWeb3()
+  const { getStudents, getWallet } = useApi()
 
   async function fetchWallet() {
     try {
-      const res = await getStudents()
+      const university = await getUniversity()
+      const wallet = await getWallet(university)
+      const res = await getStudents(wallet._id, year.toString())
       if (res) {
         const data = res.map((res: Certificate) => {
           return {
@@ -32,9 +35,14 @@ export default function StudentTable() {
       console.error(e)
     }
   }
+
+  const handleYear = (e: RadioChangeEvent) => {
+    setYear(e.target.value)
+  }
+
   useEffect(() => {
     fetchWallet()
-  }, [])
+  }, [year])
 
   const columns = [
     { title: 'ID', dataIndex: '_id', key: '_id', render: (text: string) => <a>{text}</a> },
@@ -65,5 +73,14 @@ export default function StudentTable() {
     },
   ]
 
-  return <Table columns={columns} dataSource={data} />
+  return (
+    <>
+      <Radio.Group value={year} buttonStyle="solid" onChange={handleYear}>
+        <Radio.Button value={2022}>2022</Radio.Button>
+        <Radio.Button value={2023}>2023</Radio.Button>
+        <Radio.Button value={2024}>2024</Radio.Button>
+      </Radio.Group>
+      <Table columns={columns} dataSource={data} />
+    </>
+  )
 }

@@ -21,6 +21,10 @@ jobs:
         with:
           node-version: "16"
       - run: npm install
+      - name: Create .env file
+        run: |
+          echo "NEXT_PUBLIC_CONTRACT=${{ secrets.REACT_APP_CONTRACT_ADDRESS }}" >> .env &&
+          echo "NEXT_PUBLIC_API_URI=${{ secrets.API_URI }}" >> .env
       - name: Build
         run: npm run build && npm run export
       - uses: aws-actions/configure-aws-credentials@v1

@@ -12,7 +12,7 @@ export const getWallets = async (req: express.Request, res: express.Response) =>
 
 export const getWallet = async (req: express.Request, res: express.Response) => {
   const _id = req.params.id
-  const data = await Wallet.findOne({ _id }).populate('owner')
+  const data = await Wallet.findOne({ owner:_id }).populate('owner')
   if (!data) {
     return res.status(404).end()
   }
