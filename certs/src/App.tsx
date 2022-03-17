@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { CertsRoute, initialCertificate } from 'src/consts'
 import './App.css'
+import './styles/tailwind.css'
 import Root from './components/Root'
 import Home from './pages/Home'
 import Result from './pages/Result'
-import './styles/tailwind.css'
 import { Certificate } from './types'
 
 function App() {
