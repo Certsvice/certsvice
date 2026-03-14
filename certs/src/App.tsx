@@ -1,23 +1,23 @@
 import { useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { CertsRoute, initialCertificate } from 'src/consts'
-import './App.css'
-import './styles/tailwind.css'
-import Root from './components/Root'
-import Home from './pages/Home'
-import Result from './pages/Result'
-import { Certificate } from './types'
+import Layout from 'src/components/Layout'
+import Home from 'src/pages/Home'
+import Result from 'src/pages/Result'
+import { CertsRoute } from 'src/consts'
+import { Certificate } from 'src/types'
+import { initialCertificate } from 'src/consts'
 
 function App() {
-  const [certificate, setData] = useState<Certificate>(initialCertificate)
+  const [certificate, setCertificate] = useState<Certificate>(initialCertificate)
+
   return (
     <BrowserRouter>
-      <Root>
+      <Layout>
         <Routes>
-          <Route path={CertsRoute.Index} element={<Home onSet={setData} />} />
+          <Route path={CertsRoute.Index} element={<Home onSet={setCertificate} />} />
           <Route path={CertsRoute.Result} element={<Result certificate={certificate} />} />
         </Routes>
-      </Root>
+      </Layout>
     </BrowserRouter>
   )
 }

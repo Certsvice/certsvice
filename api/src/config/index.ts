@@ -5,10 +5,10 @@ const env = process.env.NODE_ENV || 'dev'
 const baseConfig: ConfigType = {
   env: env,
   isDev: env === 'dev',
-  port: '8080',
+  port: process.env.PORT || '8080',
   secrets: {
-    jwt: process.env.JWT_SECRET,
-    jwtExp: `${process.env.JWT_EXP}h`,
+    jwt: process.env.JWT_SECRET || 'dev-secret-change-in-production',
+    jwtExp: `${process.env.JWT_EXP || '24'}h`,
   },
   dbUrl: ''
 }

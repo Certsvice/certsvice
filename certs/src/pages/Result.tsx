@@ -1,4 +1,3 @@
-import { Button } from '@nextui-org/react'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useReactToPrint } from 'react-to-print'
@@ -6,7 +5,6 @@ import CertificatePage from 'src/components/Certificate'
 import Transcript from 'src/components/Transcript'
 import { CertsRoute } from 'src/consts'
 import { Certificate } from 'src/types'
-import styled from 'styled-components'
 
 type Props = {
   certificate: Certificate
@@ -28,88 +26,70 @@ export default function Result({ certificate }: Props) {
   }, [certificate])
 
   return (
-    <Content>
-      <div className="flex w-full flex-row items-center align-middle">
-        <div
-          className=" w-auto h-auto flex items-center align-middle p-3 rounded-lg mr-auto"
-          style={{
-            backgroundColor: '#e6f1ee',
-            boxShadow: ` 5px 5px 10px #c4c4ca, -5px -5px 10px #ffffff `,
-          }}
-        >
-          <span className="material-icons-round mr-2" style={{ color: '#09a63b' }}>
-            verified_user
-          </span>
-          <div className="flex flex-col" style={{ color: '#28a745' }}>
-            <h5 className="my-0">Certificate issued by</h5>
-            <h5 className="my-0">{certificate.issuer.name}</h5>
+    <div className="max-w-5xl mx-auto px-4 py-8">
+      {/* Verified badge */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8 animate-fadeIn">
+        <div className="flex items-center gap-3 bg-emerald-500/20 backdrop-blur-sm border border-emerald-400/30 rounded-2xl px-5 py-3">
+          <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-xs text-emerald-300 font-medium">Certificate issued by</p>
+            <p className="text-white font-bold text-sm">{certificate.issuer.name}</p>
           </div>
         </div>
-        <div className="ml-auto flex flex-row items-center justify-center">
-          <Button auto ghost className="!border-0 !mr-3 !p-2" onClick={handlePrint}>
-            <span className="material-icons-round rounded-sm" style={{ color: '#e6e7ee', backgroundColor: '#44476a' }}>
-              print
-            </span>
-          </Button>
-          <Button auto ghost className="!border-0 !p-2" onClick={handlePrint}>
-            <span className="material-icons-round rounded-sm" style={{ color: '#e6e7ee', backgroundColor: '#44476a' }}>
-              get_app
-            </span>
-          </Button>
+
+        <div className="sm:ml-auto flex items-center gap-2">
+          <button
+            onClick={handlePrint}
+            className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm font-medium py-2 px-4 rounded-xl hover:bg-white/20 transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Print
+          </button>
+          <button
+            onClick={handlePrint}
+            className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm font-medium py-2 px-4 rounded-xl hover:bg-white/20 transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Save
+          </button>
         </div>
       </div>
 
-      <div className="flex w-full ">
-        <Button.Group className="!mt-8">
-          <Button className={`!rounded-b-none ${toggle ? '' : 'togle'}`} onClick={() => setToggle(true)}>
-            CERTIFICATE
-          </Button>
-          <Button className={`!rounded-b-none ${toggle ? 'togle' : ''}`} onClick={() => setToggle(false)}>
-            TRANSCRIPT
-          </Button>
-        </Button.Group>
-        <div className="ml-auto h-4 w-4"></div>
+      {/* Tabs */}
+      <div className="flex gap-2 mb-0">
+        {['Certificate', 'Transcript'].map((tab, i) => (
+          <button
+            key={tab}
+            onClick={() => setToggle(i === 0)}
+            className={`px-6 py-3 font-semibold text-sm rounded-t-xl transition-colors ${
+              toggle === (i === 0)
+                ? 'bg-white text-slate-900'
+                : 'bg-white/10 text-white/70 hover:bg-white/20 hover:text-white'
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
       </div>
 
-      <div
-        className="flex flex-col w-full h-auto rounded-b-3xl rounded-tr-3xl p-6"
-        style={{
-          minHeight: '500px',
-          backgroundColor: '#e6e7ee',
-          boxShadow: ` 5px 5px 10px #c4c4ca, -5px -5px 10px #ffffff `,
-        }}
-      >
-        {toggle ? (
-          <div ref={componentRef} className="w-auto h-auto">
-            <CertificatePage certificate={certificate}></CertificatePage>
-          </div>
-        ) : (
-          <div ref={componentRef} className="w-auto h-auto">
-            <Transcript certificate={certificate}></Transcript>
-          </div>
-        )}
+      {/* Content card */}
+      <div className="bg-white rounded-b-3xl rounded-tr-3xl shadow-2xl p-6 min-h-96 animate-fadeIn">
+        <div ref={componentRef}>
+          {toggle ? (
+            <CertificatePage certificate={certificate} />
+          ) : (
+            <Transcript certificate={certificate} />
+          )}
+        </div>
       </div>
-    </Content>
+    </div>
   )
 }
-
-const Content = styled.section`
-  margin: 0px 2rem;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  @media (min-width: 1280px) {
-    max-width: 1280px;
-  }
-  @media (min-width: 1024px) and (max-width: 1280px) {
-    max-width: 1024px;
-  }
-  @media (min-width: 768px) and (max-width: 1024px) {
-    max-width: 768px;
-  }
-  @media (max-width: 640px) {
-    max-width: 640px;
-  }
-`

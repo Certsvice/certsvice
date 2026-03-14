@@ -5,7 +5,9 @@ import Web3 from 'web3'
 export function useWeb3() {
   const web3 = new Web3(Web3.givenProvider || 'http://localhost:8545')
   const eth = web3.givenProvider
-  const certsvice = new web3.eth.Contract(ABI as AbiItem[], process.env.REACT_APP_CONTRACT_ADDRESS)
+  const contractAddress =
+    (window as any).__env__?.CONTRACT_ADDRESS || process.env.REACT_APP_CONTRACT_ADDRESS
+  const certsvice = new web3.eth.Contract(ABI as AbiItem[], contractAddress)
 
   async function getBalance(address: string): Promise<string> {
     const balance = await web3.eth.getBalance(address)
@@ -29,7 +31,7 @@ export function useWeb3() {
   async function changeChain() {
     await eth.request({
       method: 'wallet_switchEthereumChain',
-      params: [{ chainId: '0x3' }],
+      params: [{ chainId: '0xaa36a7' }], // Sepolia testnet
     })
   }
 

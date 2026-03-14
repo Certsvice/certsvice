@@ -1,17 +1,18 @@
 import Document, { Head, Html, Main, NextScript } from 'next/document'
 
-export default class StradejiDocument extends Document {
+export default class CertsviceDocument extends Document {
   render() {
     return (
-      <Html>
+      <Html lang="th">
         <Head>
+          {/* Runtime contract address injection (written by Docker entrypoint to /public/env-config.js) */}
+          <script src="/env-config.js" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
-            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;700&family=Material+Icons&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Material+Icons+Round&display=swap"
             rel="stylesheet"
           />
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
         </Head>
         <body>
           <Main />

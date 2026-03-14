@@ -1,0 +1,158 @@
+version: '3.9'
+
+# ---------------------------------------------------------------------------
+# Profiles
+#   local   — spin up a local Hardhat node + auto-deploy (no ETH needed)
+#   sepolia — deploy to Sepolia testnet (requires SEPOLIA_RPC_URL + DEPLOYER_PRIVATE_KEY)
+#
+# Usage:
+#   Local dev:
+#     docker compose --profile local up --build
+#
+#   Sepolia (deploy contract first, then start everything):
+#     docker compose --profile sepolia run --rm contract-deploy-sepolia
+#     docker compose up --build
+# ---------------------------------------------------------------------------
+
+services:
+
+  # ── MongoDB ───────────────────────────────────────────────────────────────
+  mongo:
+    image: mongo:6
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # ── Local Hardhat Node (profile: local) ───────────────────────────────────
+  hardhat:
+    profiles: [local]
+    build:
+      context: ./contract
+      dockerfile: Dockerfile
+    command: npx hardhat node --hostname 0.0.0.0
+    ports:
+      - "8545:8545"     # MetaMask custom RPC → http://localhost:8545, Chain ID 31337
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 8545 || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
+
+  # ── Contract Deployer — Local Hardhat (profile: local) ────────────────────
+  contract-deploy-local:
+    profiles: [local]
+    build:
+      context: ./contract
+      dockerfile: Dockerfile
+    command: npx hardhat run scripts/deploy-docker.js --network localhost
+    environment:
+      HARDHAT_RPC_URL: http://hardhat:8545
+    volumes:
+      - shared_data:/shared
+    depends_on:
+      hardhat:
+        condition: service_healthy
+    networks:
+      - internal
+
+  # ── Contract Deployer — Sepolia Testnet (profile: sepolia) ────────────────
+  contract-deploy-sepolia:
+    profiles: [sepolia]
+    build:
+      context: ./contract
+      dockerfile: Dockerfile
+    command: npx hardhat run scripts/deploy-docker.js --network sepolia
+    environment:
+      SEPOLIA_RPC_URL: ${SEPOLIA_RPC_URL:-}
+      DEPLOYER_PRIVATE_KEY: ${DEPLOYER_PRIVATE_KEY:-}
+    volumes:
+      - shared_data:/shared
+    networks:
+      - external
+
+  # ── REST API ──────────────────────────────────────────────────────────────
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 8080
+      DB_URI: mongodb://mongo:27017/certsvice
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXP: ${JWT_EXT:-24}
+      # Sepolia: set CONTRACT_ADDRESS in .env → used directly by entrypoint.
+      # Local:   leave empty → entrypoint waits for /shared/contract.env from deployer.
+      CONTRACT_ADDRESS: ${CONTRACT_ADDRESS:-}
+      BLOCKCHAIN_RPC_URL: ${BLOCKCHAIN_RPC_URL:-}
+    volumes:
+      - shared_data:/shared
+    ports:
+      - "8080:8080"
+    networks:
+      - internal
+      - external
+
+  # ── Back Office — Next.js ─────────────────────────────────────────────────
+  back-office:
+    build:
+      context: ./back-office
+      dockerfile: Dockerfile
+      args:
+        # Baked at build time (Sepolia). For local, window.__env__ is used at runtime.
+        NEXT_PUBLIC_API_URI: ${NEXT_PUBLIC_API_URI:-http://localhost:8080}
+        NEXT_PUBLIC_CONTRACT: ${CONTRACT_ADDRESS:-}
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      # Entrypoint reads this (or /shared/contract.env) and writes /public/env-config.js
+      CONTRACT_ADDRESS: ${CONTRACT_ADDRESS:-}
+    volumes:
+      - shared_data:/shared
+    ports:
+      - "3000:3000"
+    networks:
+      - external
+
+  # ── Certs — React SPA via nginx ───────────────────────────────────────────
+  certs:
+    build:
+      context: ./certs
+      dockerfile: Dockerfile
+      args:
+        # Baked at build time (Sepolia). For local, window.__env__ is used at runtime.
+        REACT_APP_CONTRACT_ADDRESS: ${CONTRACT_ADDRESS:-}
+    restart: unless-stopped
+    environment:
+      # Entrypoint reads this (or /shared/contract.env) and writes /html/env-config.js
+      CONTRACT_ADDRESS: ${CONTRACT_ADDRESS:-}
+    volumes:
+      - shared_data:/shared
+    ports:
+      - "3001:80"
+    networks:
+      - external
+
+volumes:
+  mongo_data:
+  shared_data:    # Contract address flows: deployer → /shared/contract.env → api + frontends
+
+networks:
+  internal:       # mongo ↔ api only
+  external:       # api, back-office, certs
